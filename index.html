@@ -241,9 +241,53 @@
       );
     }
 
-    function Playoffs({ projections }) {
+    function PlayoffMatchup({ title, team1Seed, team2Seed, week1Score, week2Score, winner, seeds, isTwoWeek, weekLabel }) {
+      if (!team1Seed || !team2Seed) return null;
+      
+      const t1 = seeds[team1Seed];
+      const t2 = seeds[team2Seed];
+      const t1w1 = week1Score?.[String(team1Seed)];
+      const t1w2 = week2Score?.[String(team1Seed)];
+      const t2w1 = week1Score?.[String(team2Seed)];
+      const t2w2 = week2Score?.[String(team2Seed)];
+      
+      const t1Total = (t1w1 || 0) + (t1w2 || 0);
+      const t2Total = (t2w1 || 0) + (t2w2 || 0);
+      const hasScores = t1w1 !== null && t1w1 !== undefined;
+      
+      return (
+        <div className="bg-slate-900/50 rounded-lg p-3">
+          <div className="text-xs text-emerald-400 mb-2">{title}</div>
+          {weekLabel && <div className="text-xs text-slate-500 mb-2">{weekLabel}</div>}
+          <div className={`flex justify-between py-2 border-b border-slate-700 ${winner === team1Seed ? 'text-emerald-400' : 'text-white'}`}>
+            <span>({team1Seed}) {t1?.abbrev || t1?.name}</span>
+            <div className="flex gap-2">
+              {hasScores && <span className="text-slate-400">{t1w1?.toFixed(1)}{isTwoWeek && t1w2 !== null && t1w2 !== undefined && ` + ${t1w2?.toFixed(1)}`}</span>}
+              {isTwoWeek && hasScores && t1w2 !== null && <span className="font-bold">= {t1Total.toFixed(1)}</span>}
+              {!isTwoWeek && hasScores && <span className="font-bold">{t1w1?.toFixed(1)}</span>}
+            </div>
+          </div>
+          <div className={`flex justify-between py-2 ${winner === team2Seed ? 'text-emerald-400' : 'text-white'}`}>
+            <span>({team2Seed}) {t2?.abbrev || t2?.name}</span>
+            <div className="flex gap-2">
+              {hasScores && <span className="text-slate-400">{t2w1?.toFixed(1)}{isTwoWeek && t2w2 !== null && t2w2 !== undefined && ` + ${t2w2?.toFixed(1)}`}</span>}
+              {isTwoWeek && hasScores && t2w2 !== null && <span className="font-bold">= {t2Total.toFixed(1)}</span>}
+              {!isTwoWeek && hasScores && <span className="font-bold">{t2w1?.toFixed(1)}</span>}
+            </div>
+          </div>
+          {winner && <div className="text-xs text-emerald-400 mt-2 text-center">Winner: ({winner}) {seeds[winner]?.name}</div>}
+        </div>
+      );
+    }
+
+    function Playoffs({ projections, playoffData }) {
       const seeds = {};
       projections.forEach((t, i) => { seeds[i + 1] = t; });
+      
+      // Use playoff data if available, otherwise show projections
+      const hasPlayoffData = playoffData && playoffData.championship;
+      const champ = playoffData?.championship;
+      const cons = playoffData?.consolation;
 
       return (
         <div className="space-y-6">
@@ -252,85 +296,225 @@
             <div className="bg-slate-800/50 rounded-lg p-4 border border-emerald-500/30">
               <div className="text-xs text-slate-400 mb-3">Two-week matchups (Weeks 14-15 → 16-17)</div>
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-slate-900/50 rounded-lg p-3">
-                  <div className="text-xs text-emerald-400 mb-2">Semifinal 1</div>
-                  <div className="flex justify-between py-2 border-b border-slate-700 text-white">
-                    <span>(1) {seeds[1]?.name}</span><span className="text-slate-400">{seeds[1]?.totalVP} VP</span>
-                  </div>
-                  <div className="flex justify-between py-2 text-white">
-                    <span>(4) {seeds[4]?.name}</span><span className="text-slate-400">{seeds[4]?.totalVP} VP</span>
-                  </div>
-                </div>
-                <div className="bg-slate-900/50 rounded-lg p-3">
-                  <div className="text-xs text-emerald-400 mb-2">Semifinal 2</div>
-                  <div className="flex justify-between py-2 border-b border-slate-700 text-white">
-                    <span>(2) {seeds[2]?.name}</span><span className="text-slate-400">{seeds[2]?.totalVP} VP</span>
-                  </div>
-                  <div className="flex justify-between py-2 text-white">
-                    <span>(3) {seeds[3]?.name}</span><span className="text-slate-400">{seeds[3]?.totalVP} VP</span>
-                  </div>
-                </div>
+                {hasPlayoffData ? (
+                  <>
+                    <PlayoffMatchup
+                      title="Semifinal 1"
+                      team1Seed={1}
+                      team2Seed={4}
+                      week1Score={champ.semifinal1.week14Score}
+                      week2Score={champ.semifinal1.week15Score}
+                      winner={champ.semifinal1.winner}
+                      seeds={seeds}
+                      isTwoWeek={true}
+                      weekLabel="Weeks 14-15"
+                    />
+                    <PlayoffMatchup
+                      title="Semifinal 2"
+                      team1Seed={2}
+                      team2Seed={3}
+                      week1Score={champ.semifinal2.week14Score}
+                      week2Score={champ.semifinal2.week15Score}
+                      winner={champ.semifinal2.winner}
+                      seeds={seeds}
+                      isTwoWeek={true}
+                      weekLabel="Weeks 14-15"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <div className="bg-slate-900/50 rounded-lg p-3">
+                      <div className="text-xs text-emerald-400 mb-2">Semifinal 1</div>
+                      <div className="flex justify-between py-2 border-b border-slate-700 text-white">
+                        <span>(1) {seeds[1]?.name}</span><span className="text-slate-400">{seeds[1]?.totalVP} VP</span>
+                      </div>
+                      <div className="flex justify-between py-2 text-white">
+                        <span>(4) {seeds[4]?.name}</span><span className="text-slate-400">{seeds[4]?.totalVP} VP</span>
+                      </div>
+                    </div>
+                    <div className="bg-slate-900/50 rounded-lg p-3">
+                      <div className="text-xs text-emerald-400 mb-2">Semifinal 2</div>
+                      <div className="flex justify-between py-2 border-b border-slate-700 text-white">
+                        <span>(2) {seeds[2]?.name}</span><span className="text-slate-400">{seeds[2]?.totalVP} VP</span>
+                      </div>
+                      <div className="flex justify-between py-2 text-white">
+                        <span>(3) {seeds[3]?.name}</span><span className="text-slate-400">{seeds[3]?.totalVP} VP</span>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
-              <div className="mt-4 text-center">
-                <div className="inline-block bg-yellow-500/20 rounded-lg px-4 py-2">
-                  <div className="text-xs text-yellow-400">Championship (Weeks 16-17)</div>
-                  <div className="text-slate-300 text-sm mt-1">Winners meet for the title</div>
-                </div>
+              
+              {/* Championship Final */}
+              <div className="mt-4">
+                {hasPlayoffData && champ.final.team1Seed && champ.final.team2Seed ? (
+                  <PlayoffMatchup
+                    title="🏆 Championship Final"
+                    team1Seed={champ.final.team1Seed}
+                    team2Seed={champ.final.team2Seed}
+                    week1Score={champ.final.week16Score}
+                    week2Score={champ.final.week17Score}
+                    winner={champ.final.winner}
+                    seeds={seeds}
+                    isTwoWeek={true}
+                    weekLabel="Weeks 16-17"
+                  />
+                ) : (
+                  <div className="text-center">
+                    <div className="inline-block bg-yellow-500/20 rounded-lg px-4 py-2">
+                      <div className="text-xs text-yellow-400">Championship (Weeks 16-17)</div>
+                      <div className="text-slate-300 text-sm mt-1">Winners meet for the title</div>
+                    </div>
+                  </div>
+                )}
               </div>
+              
+              {champ?.final?.winner && (
+                <div className="mt-4 text-center">
+                  <div className="inline-block bg-yellow-500/30 rounded-lg px-6 py-3">
+                    <div className="text-yellow-400 text-lg font-bold">🏆 CHAMPION 🏆</div>
+                    <div className="text-white text-xl mt-1">{seeds[champ.final.winner]?.name}</div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">🏅 Consolation Bracket</h3>
             <div className="bg-slate-800/50 rounded-lg p-4 border border-yellow-500/30 space-y-4">
+              {/* Week 14 */}
               <div>
                 <div className="text-xs text-yellow-400 mb-2">Week 14</div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
                   <div className="bg-slate-900/50 rounded p-2 text-center"><div className="text-slate-400 text-xs">Bye</div><div className="text-white">(5) {seeds[5]?.abbrev}</div></div>
                   <div className="bg-slate-900/50 rounded p-2 text-center"><div className="text-slate-400 text-xs">Bye</div><div className="text-white">(6) {seeds[6]?.abbrev}</div></div>
-                  <div className="bg-slate-900/50 rounded p-2 text-center text-white">(7) {seeds[7]?.abbrev} vs (10) {seeds[10]?.abbrev}</div>
-                  <div className="bg-slate-900/50 rounded p-2 text-center text-white">(8) {seeds[8]?.abbrev} vs (9) {seeds[9]?.abbrev}</div>
+                  {hasPlayoffData ? (
+                    <>
+                      <div className={`bg-slate-900/50 rounded p-2 text-center ${cons.week14.match1.winner === 7 ? 'text-emerald-400' : cons.week14.match1.winner === 10 ? 'text-slate-400' : 'text-white'}`}>
+                        (7) {seeds[7]?.abbrev} {cons.week14.match1.score?.["7"]?.toFixed(1) || ''}
+                        <div className={cons.week14.match1.winner === 10 ? 'text-emerald-400' : ''}>
+                          (10) {seeds[10]?.abbrev} {cons.week14.match1.score?.["10"]?.toFixed(1) || ''}
+                        </div>
+                      </div>
+                      <div className={`bg-slate-900/50 rounded p-2 text-center ${cons.week14.match2.winner === 8 ? 'text-emerald-400' : cons.week14.match2.winner === 9 ? 'text-slate-400' : 'text-white'}`}>
+                        (8) {seeds[8]?.abbrev} {cons.week14.match2.score?.["8"]?.toFixed(1) || ''}
+                        <div className={cons.week14.match2.winner === 9 ? 'text-emerald-400' : ''}>
+                          (9) {seeds[9]?.abbrev} {cons.week14.match2.score?.["9"]?.toFixed(1) || ''}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="bg-slate-900/50 rounded p-2 text-center text-white">(7) {seeds[7]?.abbrev} vs (10) {seeds[10]?.abbrev}</div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center text-white">(8) {seeds[8]?.abbrev} vs (9) {seeds[9]?.abbrev}</div>
+                    </>
+                  )}
                 </div>
               </div>
+              
+              {/* Week 15 */}
               <div>
                 <div className="text-xs text-yellow-400 mb-2">Week 15</div>
-                <div className="text-slate-300 text-sm">(5) vs lowest seed winner • (6) vs highest seed winner</div>
-                <div className="text-slate-500 text-xs mt-1">Losers begin Toilet Bowl (2-week matchup)</div>
+                {hasPlayoffData && cons.week15.match1.team2Seed ? (
+                  <div className="grid md:grid-cols-2 gap-2">
+                    <PlayoffMatchup
+                      title={`(5) vs (${cons.week15.match1.team2Seed})`}
+                      team1Seed={5}
+                      team2Seed={cons.week15.match1.team2Seed}
+                      week1Score={cons.week15.match1.score}
+                      week2Score={{}}
+                      winner={cons.week15.match1.winner}
+                      seeds={seeds}
+                      isTwoWeek={false}
+                    />
+                    <PlayoffMatchup
+                      title={`(6) vs (${cons.week15.match2.team2Seed})`}
+                      team1Seed={6}
+                      team2Seed={cons.week15.match2.team2Seed}
+                      week1Score={cons.week15.match2.score}
+                      week2Score={{}}
+                      winner={cons.week15.match2.winner}
+                      seeds={seeds}
+                      isTwoWeek={false}
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-slate-300 text-sm">(5) vs lowest seed winner • (6) vs highest seed winner</div>
+                    <div className="text-slate-500 text-xs mt-1">Losers begin Toilet Bowl (2-week matchup)</div>
+                  </>
+                )}
               </div>
+              
+              {/* Finals */}
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-600">
-                  <div className="text-xs text-slate-400">Consolation Final (Wk 16-17)</div>
-                  <div className="text-white text-sm">Week 15 winners</div>
-                </div>
-                <div className="bg-slate-900/50 rounded-lg p-3 border border-red-500/30">
-                  <div className="text-xs text-red-400">💀 Toilet Bowl (Wk 16-17)</div>
-                  <div className="text-slate-300 text-sm">Loser "wins"</div>
-                </div>
+                {hasPlayoffData && cons.final.team1Seed && cons.final.team2Seed ? (
+                  <PlayoffMatchup
+                    title="🏅 Consolation Final"
+                    team1Seed={cons.final.team1Seed}
+                    team2Seed={cons.final.team2Seed}
+                    week1Score={cons.final.week16Score}
+                    week2Score={cons.final.week17Score}
+                    winner={cons.final.winner}
+                    seeds={seeds}
+                    isTwoWeek={true}
+                    weekLabel="Weeks 16-17"
+                  />
+                ) : (
+                  <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-600">
+                    <div className="text-xs text-slate-400">Consolation Final (Wk 16-17)</div>
+                    <div className="text-white text-sm">Week 15 winners</div>
+                  </div>
+                )}
+                
+                {hasPlayoffData && cons.toiletBowl.team1Seed && cons.toiletBowl.team2Seed ? (
+                  <div className="bg-slate-900/50 rounded-lg p-3 border border-red-500/30">
+                    <div className="text-xs text-red-400 mb-2">💀 Toilet Bowl (Weeks 16-17)</div>
+                    <div className="text-slate-400 text-xs mb-2">Loser "wins"</div>
+                    <div className={`flex justify-between py-1 ${cons.toiletBowl.loser === cons.toiletBowl.team1Seed ? 'text-red-400' : 'text-white'}`}>
+                      <span>({cons.toiletBowl.team1Seed}) {seeds[cons.toiletBowl.team1Seed]?.abbrev}</span>
+                      <span>{((cons.toiletBowl.week16Score?.[String(cons.toiletBowl.team1Seed)] || 0) + (cons.toiletBowl.week17Score?.[String(cons.toiletBowl.team1Seed)] || 0)).toFixed(1) || ''}</span>
+                    </div>
+                    <div className={`flex justify-between py-1 ${cons.toiletBowl.loser === cons.toiletBowl.team2Seed ? 'text-red-400' : 'text-white'}`}>
+                      <span>({cons.toiletBowl.team2Seed}) {seeds[cons.toiletBowl.team2Seed]?.abbrev}</span>
+                      <span>{((cons.toiletBowl.week16Score?.[String(cons.toiletBowl.team2Seed)] || 0) + (cons.toiletBowl.week17Score?.[String(cons.toiletBowl.team2Seed)] || 0)).toFixed(1) || ''}</span>
+                    </div>
+                    {cons.toiletBowl.loser && <div className="text-xs text-red-400 mt-2 text-center">💀 Winner: ({cons.toiletBowl.loser}) {seeds[cons.toiletBowl.loser]?.name}</div>}
+                  </div>
+                ) : (
+                  <div className="bg-slate-900/50 rounded-lg p-3 border border-red-500/30">
+                    <div className="text-xs text-red-400">💀 Toilet Bowl (Wk 16-17)</div>
+                    <div className="text-slate-300 text-sm">Loser "wins"</div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-white mb-4">📊 Playoff Projections</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">📊 Final Standings</h3>
             <div className="bg-slate-800/50 rounded-lg border border-slate-700 overflow-hidden">
               <table className="w-full text-sm">
                 <thead className="bg-slate-800">
                   <tr className="text-slate-400">
+                    <th className="text-left py-2 px-3">Seed</th>
                     <th className="text-left py-2 px-3">Team</th>
-                    <th className="text-center py-2 px-3">Current VP</th>
-                    <th className="text-center py-2 px-3">Max Possible</th>
-                    <th className="text-center py-2 px-3">Status</th>
+                    <th className="text-center py-2 px-3">VP</th>
+                    <th className="text-center py-2 px-3">Total Pts</th>
+                    <th className="text-center py-2 px-3">Bracket</th>
                   </tr>
                 </thead>
                 <tbody>
                   {projections.map((team, i) => (
                     <tr key={team.id} className="border-t border-slate-700">
-                      <td className="py-2 px-3 text-white">({i + 1}) {team.name}</td>
+                      <td className="py-2 px-3 text-slate-400">{i + 1}</td>
+                      <td className="py-2 px-3 text-white">{team.name}</td>
                       <td className="text-center py-2 px-3 text-slate-300">{team.totalVP}</td>
-                      <td className="text-center py-2 px-3 text-slate-400">{team.maxPossible}</td>
+                      <td className="text-center py-2 px-3 text-slate-400">{team.totalPts?.toFixed(1)}</td>
                       <td className="text-center py-2 px-3">
                         <span className={`text-xs px-2 py-1 rounded-full ${i < 4 ? 'bg-emerald-500/20 text-emerald-400' : i < 6 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-700 text-slate-400'}`}>
-                          {team.status}
+                          {i < 4 ? 'Championship' : i < 6 ? 'Consolation (Bye)' : 'Consolation'}
                         </span>
                       </td>
                     </tr>
@@ -356,7 +540,10 @@
           .catch(err => { console.error(err); setLoading(false); });
       }, []);
 
-      const standings = useMemo(() => data ? calculateStandings(data.teams, data.weeks, data.schedule) : [], [data]);
+      const standings = useMemo(() => {
+        if (data.standings) return data.standings;
+        return data ? calculateStandings(data.teams, data.weeks, data.schedule) : [];
+      }, [data]);
       const projections = useMemo(() => data ? calculateProjections(standings, data.weeks.length, CONFIG.regularSeasonWeeks) : [], [standings, data]);
 
       if (loading) return <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">Loading...</div>;
@@ -390,7 +577,7 @@
             <div className="bg-slate-800/30 rounded-xl p-4 md:p-6 border border-slate-700">
               {view === 'standings' && <Standings projections={projections} />}
               {view === 'matchups' && <WeeklyView data={data} standings={standings} selectedWeek={selectedWeek} setSelectedWeek={setSelectedWeek} />}
-              {view === 'playoffs' && <Playoffs projections={projections} />}
+              {view === 'playoffs' && <Playoffs projections={projections} playoffData={data.playoffs} />}
             </div>
 
             <div className="text-center mt-6 text-xs text-slate-600">

@@ -1,7 +1,7 @@
 {
   "leagueName": "Master's League",
   "year": 2025,
-  "currentWeek": 13,
+  "currentWeek": 17,
   "teams": [
     {
       "id": 1,
@@ -834,5 +834,302 @@
         ]
       ]
     }
-  ]
+  ],
+  "standings": [
+    {
+      "id": 4,
+      "name": "below budget..",
+      "abbrev": "crap",
+      "owner": "Buster Bruton",
+      "totalVP": 60,
+      "h2hVP": 40,
+      "ptsVP": 20,
+      "totalPts": 2206.38,
+      "wins": 20,
+      "losses": 6,
+      "ties": 0
+    },
+    {
+      "id": 7,
+      "name": "Wawa Warriors",
+      "abbrev": "WAWA",
+      "owner": "Josh Tyson",
+      "totalVP": 47,
+      "h2hVP": 34,
+      "ptsVP": 13,
+      "totalPts": 1971.34,
+      "wins": 17,
+      "losses": 9,
+      "ties": 0
+    },
+    {
+      "id": 1,
+      "name": "The Holy Geauxst",
+      "abbrev": "TNA",
+      "owner": "Neilson Arbour",
+      "totalVP": 42,
+      "h2hVP": 28,
+      "ptsVP": 14,
+      "totalPts": 2066.62,
+      "wins": 14,
+      "losses": 12,
+      "ties": 0
+    },
+    {
+      "id": 9,
+      "name": "Chase the Rainbow",
+      "abbrev": "JACE",
+      "owner": "Jace Jackson",
+      "totalVP": 42,
+      "h2hVP": 28,
+      "ptsVP": 14,
+      "totalPts": 2015.8199999999997,
+      "wins": 14,
+      "losses": 12,
+      "ties": 0
+    },
+    {
+      "id": 6,
+      "name": "Baby Back Gibbs",
+      "abbrev": "BBG",
+      "owner": "David Brown",
+      "totalVP": 40,
+      "h2hVP": 28,
+      "ptsVP": 12,
+      "totalPts": 1967.8400000000004,
+      "wins": 14,
+      "losses": 12,
+      "ties": 0
+    },
+    {
+      "id": 2,
+      "name": "No Talent  Ass Clowns",
+      "abbrev": "NTAC",
+      "owner": "Sam Mo",
+      "totalVP": 37,
+      "h2hVP": 26,
+      "ptsVP": 11,
+      "totalPts": 1834.92,
+      "wins": 13,
+      "losses": 13,
+      "ties": 0
+    },
+    {
+      "id": 10,
+      "name": "The Tortured Touchdown Dept",
+      "abbrev": "TTDD",
+      "owner": "Logan Caldwell",
+      "totalVP": 34,
+      "h2hVP": 22,
+      "ptsVP": 12,
+      "totalPts": 1924.6800000000003,
+      "wins": 11,
+      "losses": 15,
+      "ties": 0
+    },
+    {
+      "id": 3,
+      "name": "Josh Hoover for Hire",
+      "abbrev": "GORE",
+      "owner": "Kyle Gore",
+      "totalVP": 29,
+      "h2hVP": 20,
+      "ptsVP": 9,
+      "totalPts": 1890.98,
+      "wins": 10,
+      "losses": 16,
+      "ties": 0
+    },
+    {
+      "id": 5,
+      "name": "Navin Johnson",
+      "abbrev": "WWR",
+      "owner": "WATT REYNOLDS",
+      "totalVP": 28,
+      "h2hVP": 18,
+      "ptsVP": 10,
+      "totalPts": 1888.92,
+      "wins": 9,
+      "losses": 17,
+      "ties": 0
+    },
+    {
+      "id": 8,
+      "name": "The Running Man",
+      "abbrev": "RUN",
+      "owner": "Jeff Tack",
+      "totalVP": 18,
+      "h2hVP": 16,
+      "ptsVP": 2,
+      "totalPts": 1688.7599999999998,
+      "wins": 8,
+      "losses": 18,
+      "ties": 0
+    }
+  ],
+  "playoffs": {
+    "seeds": {
+      "1": {
+        "id": 4,
+        "name": "below budget..",
+        "abbrev": "crap"
+      },
+      "2": {
+        "id": 7,
+        "name": "Wawa Warriors",
+        "abbrev": "WAWA"
+      },
+      "3": {
+        "id": 1,
+        "name": "The Holy Geauxst",
+        "abbrev": "TNA"
+      },
+      "4": {
+        "id": 9,
+        "name": "Chase the Rainbow",
+        "abbrev": "JACE"
+      },
+      "5": {
+        "id": 6,
+        "name": "Baby Back Gibbs",
+        "abbrev": "BBG"
+      },
+      "6": {
+        "id": 2,
+        "name": "No Talent  Ass Clowns",
+        "abbrev": "NTAC"
+      },
+      "7": {
+        "id": 10,
+        "name": "The Tortured Touchdown Dept",
+        "abbrev": "TTDD"
+      },
+      "8": {
+        "id": 3,
+        "name": "Josh Hoover for Hire",
+        "abbrev": "GORE"
+      },
+      "9": {
+        "id": 5,
+        "name": "Navin Johnson",
+        "abbrev": "WWR"
+      },
+      "10": {
+        "id": 8,
+        "name": "The Running Man",
+        "abbrev": "RUN"
+      }
+    },
+    "championship": {
+      "semifinal1": {
+        "team1Seed": 1,
+        "team2Seed": 4,
+        "week14Score": {
+          "1": 235.06,
+          "4": 292.08
+        },
+        "week15Score": {
+          "1": 235.06,
+          "4": 292.08
+        },
+        "winner": 4
+      },
+      "semifinal2": {
+        "team1Seed": 2,
+        "team2Seed": 3,
+        "week14Score": {
+          "2": 233.04,
+          "3": 306.4
+        },
+        "week15Score": {
+          "2": 233.04,
+          "3": 306.4
+        },
+        "winner": 3
+      },
+      "final": {
+        "team1Seed": 4,
+        "team2Seed": 3,
+        "week16Score": {
+          "4": 388.48,
+          "3": 148.62
+        },
+        "week17Score": {
+          "4": 388.48,
+          "3": 148.62
+        },
+        "winner": 4
+      }
+    },
+    "consolation": {
+      "week14": {
+        "match1": {
+          "team1Seed": 7,
+          "team2Seed": 10,
+          "score": {
+            "7": 271.54,
+            "10": 257.18
+          },
+          "winner": 7
+        },
+        "match2": {
+          "team1Seed": 8,
+          "team2Seed": 9,
+          "score": {
+            "8": 354.0,
+            "9": 351.36
+          },
+          "winner": 8
+        },
+        "bye5": 5,
+        "bye6": 6
+      },
+      "week15": {
+        "match1": {
+          "team1Seed": 5,
+          "team2Seed": 8,
+          "score": {
+            "5": 342.92,
+            "8": 354.0
+          },
+          "winner": 8
+        },
+        "match2": {
+          "team1Seed": 6,
+          "team2Seed": 7,
+          "score": {
+            "6": 357.5,
+            "7": 271.54
+          },
+          "winner": 6
+        }
+      },
+      "final": {
+        "team1Seed": 8,
+        "team2Seed": 6,
+        "week16Score": {
+          "8": 300.28,
+          "6": 338.34
+        },
+        "week17Score": {
+          "8": 300.28,
+          "6": 338.34
+        },
+        "winner": 6
+      },
+      "toiletBowl": {
+        "team1Seed": 5,
+        "team2Seed": 7,
+        "week16Score": {
+          "5": 365.66,
+          "7": 258.26
+        },
+        "week17Score": {
+          "5": 365.66,
+          "7": 258.26
+        },
+        "loser": 7
+      }
+    }
+  }
 }
