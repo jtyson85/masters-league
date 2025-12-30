@@ -7,799 +7,80 @@
       "id": 1,
       "name": "The Holy Geauxst",
       "abbrev": "TNA",
-      "owner": {
-        "displayName": "tnarbour",
-        "firstName": "Neilson",
-        "id": "{808B888B-A662-11D3-8209-00A0C9E58E2D}",
-        "lastName": "Arbour",
-        "notificationSettings": [
-          {
-            "enabled": true,
-            "id": "a8aae89b-578d-3b58-8331-eef41d04f9bc",
-            "type": "TEAM_PLAYER_INJURY"
-          },
-          {
-            "enabled": true,
-            "id": "d1de2b98-8a84-32ac-9b26-629be0aec022",
-            "type": "TEAM_PLAYER_AVAILABILITY"
-          },
-          {
-            "enabled": true,
-            "id": "c225002b-4b81-3a04-b0dc-99a92893ff38",
-            "type": "TEAM_PLAYER_NEWS"
-          },
-          {
-            "enabled": true,
-            "id": "60c3f95d-7704-34c4-9c00-e0e9cd18f658",
-            "type": "TEAM_PLAYER_STARTBENCH"
-          },
-          {
-            "enabled": true,
-            "id": "221b4177-2f68-31b4-b2b9-70427b7f21a4",
-            "type": "TEAM_TRADE_OFFER"
-          },
-          {
-            "enabled": true,
-            "id": "3206014c-e106-3710-8c1d-8d34f5e998a8",
-            "type": "DRAFT"
-          },
-          {
-            "enabled": true,
-            "id": "bf19b2c8-4574-3e8a-bc02-f9360748382a",
-            "type": "TEAM_MATCHUP_SCORE"
-          },
-          {
-            "enabled": true,
-            "id": "daf1dd90-f6a6-3cf4-9c15-bb82dfb5fbb2",
-            "type": "KEY_PLAY"
-          },
-          {
-            "enabled": true,
-            "id": "021f99c5-8295-3dcd-8b3a-afb0bef73fe0",
-            "type": "REDZONE"
-          },
-          {
-            "enabled": true,
-            "id": "02b221ce-d8b9-3e90-81ab-4e52f6f88d46",
-            "type": "ADD_DROP"
-          },
-          {
-            "enabled": true,
-            "id": "2ef39787-3812-37e3-b4bb-0d075698f1d2",
-            "type": "WEEKLY_RECAP"
-          },
-          {
-            "enabled": true,
-            "id": "f389cae0-6419-344a-94d9-68e4d5e3d46c",
-            "type": "WAIVERS"
-          },
-          {
-            "enabled": true,
-            "id": "37e9e0c0-cdb9-3027-a03e-bb00254088ca",
-            "type": "CELEBRATION_SHARE"
-          }
-        ]
-      }
+      "owner": "Neilson Arbour"
     },
     {
       "id": 2,
       "name": "No Talent  Ass Clowns",
       "abbrev": "NTAC",
-      "owner": {
-        "displayName": "slambomore111",
-        "firstName": "Sam",
-        "id": "{AEC3F1D3-695B-4459-A26E-87FE5F2AA32F}",
-        "lastName": "Mo",
-        "notificationSettings": [
-          {
-            "enabled": true,
-            "id": "86bd5fde-b1ca-3fbb-bbfb-2d29efcb8ae7",
-            "type": "TEAM_PLAYER_INJURY"
-          },
-          {
-            "enabled": true,
-            "id": "8121ced3-2a07-3015-a340-405245b22b3b",
-            "type": "TEAM_PLAYER_AVAILABILITY"
-          },
-          {
-            "enabled": true,
-            "id": "44d3fedd-fb51-30fc-8960-cdbd7f2a34aa",
-            "type": "TEAM_PLAYER_NEWS"
-          },
-          {
-            "enabled": true,
-            "id": "86cef350-c849-3a3c-a485-9afa1369b607",
-            "type": "TEAM_PLAYER_STARTBENCH"
-          },
-          {
-            "enabled": true,
-            "id": "3ae8cda5-166b-378e-b671-9a7e8b19f334",
-            "type": "TEAM_TRADE_OFFER"
-          },
-          {
-            "enabled": true,
-            "id": "44e634b4-8ca4-3a71-a6b1-e712a9e1e1b5",
-            "type": "DRAFT"
-          },
-          {
-            "enabled": true,
-            "id": "d6d56766-6ee8-3861-a5c3-eba1a73c3ec2",
-            "type": "TEAM_MATCHUP_SCORE"
-          },
-          {
-            "enabled": true,
-            "id": "c0f67581-41b9-39c5-bcdb-fe3fef9216ca",
-            "type": "KEY_PLAY"
-          },
-          {
-            "enabled": true,
-            "id": "2280fac8-6cfe-3c16-b86f-cd7a98b47322",
-            "type": "REDZONE"
-          },
-          {
-            "enabled": true,
-            "id": "1298acd6-a788-3fdc-83d8-50eb9b93c1ed",
-            "type": "ADD_DROP"
-          },
-          {
-            "enabled": true,
-            "id": "dadc8d69-2709-3c9d-a8b8-b4db0aac3f34",
-            "type": "WEEKLY_RECAP"
-          },
-          {
-            "enabled": true,
-            "id": "08093733-3ff9-3f6e-bd95-d77d8c23c02e",
-            "type": "WAIVERS"
-          },
-          {
-            "enabled": true,
-            "id": "2588c3fd-f75f-3593-829c-cc2a3cbe1b14",
-            "type": "CELEBRATION_SHARE"
-          }
-        ]
-      }
+      "owner": "Sam Mo"
     },
     {
       "id": 3,
       "name": "Josh Hoover for Hire",
       "abbrev": "GORE",
-      "owner": {
-        "displayName": "kylegore722",
-        "firstName": "Kyle",
-        "id": "{049E10ED-2F38-4C0F-84A5-D4E404039F2C}",
-        "lastName": "Gore",
-        "notificationSettings": [
-          {
-            "enabled": true,
-            "id": "f0d4407d-eacd-364e-998b-2b0b2170982e",
-            "type": "TEAM_PLAYER_INJURY"
-          },
-          {
-            "enabled": true,
-            "id": "bf5de841-3e22-3f98-addc-6530064b72d9",
-            "type": "TEAM_PLAYER_AVAILABILITY"
-          },
-          {
-            "enabled": true,
-            "id": "46779be1-40ac-32c1-9504-638716c5a34c",
-            "type": "TEAM_PLAYER_NEWS"
-          },
-          {
-            "enabled": true,
-            "id": "a615702e-790d-3da0-9d79-0b5bb93f8063",
-            "type": "TEAM_PLAYER_STARTBENCH"
-          },
-          {
-            "enabled": true,
-            "id": "151fbfbb-117e-3c59-8655-45e5241a8deb",
-            "type": "TEAM_TRADE_OFFER"
-          },
-          {
-            "enabled": true,
-            "id": "83ab45b9-4613-38f6-9e53-6c4dec7436cb",
-            "type": "DRAFT"
-          },
-          {
-            "enabled": true,
-            "id": "6efe30ae-22cb-38ae-abbf-d8bff6a31587",
-            "type": "TEAM_MATCHUP_SCORE"
-          },
-          {
-            "enabled": true,
-            "id": "e2dfa574-c5bd-38b9-bd5b-1def37f86fff",
-            "type": "KEY_PLAY"
-          },
-          {
-            "enabled": true,
-            "id": "a12796f8-1ef2-327e-b80e-40ec59bc30ee",
-            "type": "REDZONE"
-          },
-          {
-            "enabled": true,
-            "id": "bda8e1bf-898a-3135-99f9-8397ccec24db",
-            "type": "ADD_DROP"
-          },
-          {
-            "enabled": true,
-            "id": "9601919a-cf53-3c34-a435-1c36e47b47a8",
-            "type": "WEEKLY_RECAP"
-          },
-          {
-            "enabled": true,
-            "id": "0b78b98c-c60d-3fe6-b8ad-5c1b1415dcc1",
-            "type": "WAIVERS"
-          },
-          {
-            "enabled": true,
-            "id": "7b4df0ae-bbcf-3fed-b79b-0d64e789c3b3",
-            "type": "CELEBRATION_SHARE"
-          }
-        ]
-      }
+      "owner": "Kyle Gore"
     },
     {
       "id": 4,
       "name": "below budget..",
       "abbrev": "crap",
-      "owner": {
-        "displayName": "BUSTERBRUTON",
-        "firstName": "Buster",
-        "id": "{AE0D13E4-AD08-464D-8D13-E4AD08164DA5}",
-        "lastName": "Bruton",
-        "notificationSettings": [
-          {
-            "enabled": true,
-            "id": "dc587303-9040-3ca6-b6e3-64c5b52cc115",
-            "type": "TEAM_PLAYER_INJURY"
-          },
-          {
-            "enabled": true,
-            "id": "31b9dfe2-9f65-3b53-a775-1450d17a1e66",
-            "type": "TEAM_PLAYER_AVAILABILITY"
-          },
-          {
-            "enabled": true,
-            "id": "7a8a9dee-99f9-3406-b471-15c007e0b946",
-            "type": "TEAM_PLAYER_NEWS"
-          },
-          {
-            "enabled": true,
-            "id": "70c1f962-71f3-3b40-9295-4db9e84c5fa1",
-            "type": "TEAM_PLAYER_STARTBENCH"
-          },
-          {
-            "enabled": true,
-            "id": "524a526c-ff7c-35bd-b26b-4faaa1a72dfc",
-            "type": "TEAM_TRADE_OFFER"
-          },
-          {
-            "enabled": true,
-            "id": "6858ed05-5f14-3017-9a5e-db18ad2fb7e1",
-            "type": "DRAFT"
-          },
-          {
-            "enabled": true,
-            "id": "ab814ec7-95a9-3981-b5e8-4527fbdf1e23",
-            "type": "TEAM_MATCHUP_SCORE"
-          },
-          {
-            "enabled": true,
-            "id": "96b477ee-0073-395a-9e6e-e05eccbcd249",
-            "type": "KEY_PLAY"
-          },
-          {
-            "enabled": true,
-            "id": "70897422-4b0a-3b2f-8845-3f38e73d7195",
-            "type": "REDZONE"
-          },
-          {
-            "enabled": true,
-            "id": "004097d9-120b-3058-a4a2-5c9845c397c7",
-            "type": "ADD_DROP"
-          },
-          {
-            "enabled": true,
-            "id": "ee624bd1-21ad-3d70-bebd-337888f897d4",
-            "type": "WEEKLY_RECAP"
-          },
-          {
-            "enabled": true,
-            "id": "235cf90b-473d-3cf3-a87d-f04eacbf4842",
-            "type": "WAIVERS"
-          },
-          {
-            "enabled": true,
-            "id": "362bf69a-8462-32fd-81c9-ed96bdbd1b79",
-            "type": "CELEBRATION_SHARE"
-          }
-        ]
-      }
+      "owner": "Buster Bruton"
     },
     {
       "id": 5,
       "name": "Navin Johnson",
       "abbrev": "WWR",
-      "owner": {
-        "displayName": "espn09713147",
-        "firstName": "WATT",
-        "id": "{61A998AA-609A-4B9C-A998-AA609AFB9C87}",
-        "lastName": "REYNOLDS",
-        "notificationSettings": [
-          {
-            "enabled": true,
-            "id": "05c3db51-53ae-3d10-83d6-f67a1506d61c",
-            "type": "TEAM_PLAYER_INJURY"
-          },
-          {
-            "enabled": true,
-            "id": "2cd05804-4aab-3d5e-8b6d-5eea4e714634",
-            "type": "TEAM_PLAYER_AVAILABILITY"
-          },
-          {
-            "enabled": true,
-            "id": "5ef513fa-c833-3c14-a806-8d52b6db913f",
-            "type": "TEAM_PLAYER_NEWS"
-          },
-          {
-            "enabled": true,
-            "id": "a9a2e6b7-2ef9-3f79-be98-42288051adce",
-            "type": "TEAM_PLAYER_STARTBENCH"
-          },
-          {
-            "enabled": true,
-            "id": "72751158-fff7-3c32-b2c5-beb40e1d195a",
-            "type": "TEAM_TRADE_OFFER"
-          },
-          {
-            "enabled": true,
-            "id": "4c4dac8f-8f77-30d7-aa61-a8ee854d04a1",
-            "type": "DRAFT"
-          },
-          {
-            "enabled": true,
-            "id": "60f1e793-8a4c-3ed2-8ad7-54f69b6a32af",
-            "type": "TEAM_MATCHUP_SCORE"
-          },
-          {
-            "enabled": true,
-            "id": "f97d2d86-9670-392d-bfce-9ea955765854",
-            "type": "KEY_PLAY"
-          },
-          {
-            "enabled": true,
-            "id": "5cf9be76-cba5-3228-b261-421381f3f244",
-            "type": "REDZONE"
-          },
-          {
-            "enabled": true,
-            "id": "c22058d3-4ecd-3e94-ba89-6c2973ee96d5",
-            "type": "ADD_DROP"
-          },
-          {
-            "enabled": true,
-            "id": "50d537f1-6a2b-30fe-ad31-f3860469c198",
-            "type": "WEEKLY_RECAP"
-          },
-          {
-            "enabled": true,
-            "id": "f5617963-e2cd-3966-b68b-1e619854107d",
-            "type": "WAIVERS"
-          },
-          {
-            "enabled": true,
-            "id": "f4d75037-8483-382d-afb7-c0a50b729053",
-            "type": "CELEBRATION_SHARE"
-          }
-        ]
-      }
+      "owner": "WATT REYNOLDS"
     },
     {
       "id": 6,
       "name": "Baby Back Gibbs",
       "abbrev": "BBG",
-      "owner": {
-        "displayName": "ESPNFAN7180914319",
-        "firstName": "David",
-        "id": "{6F2A9BD6-BE52-471D-9D42-D4D57F0097F3}",
-        "lastName": "Brown",
-        "notificationSettings": [
-          {
-            "enabled": true,
-            "id": "541c2097-0ef1-3997-bbf5-1f0833937a8d",
-            "type": "TEAM_PLAYER_INJURY"
-          },
-          {
-            "enabled": true,
-            "id": "89f5cb3a-9cc1-3e85-a145-593524ce6003",
-            "type": "TEAM_PLAYER_AVAILABILITY"
-          },
-          {
-            "enabled": true,
-            "id": "0c05bcfe-eff8-38d1-bf07-8158ae6a5138",
-            "type": "TEAM_PLAYER_NEWS"
-          },
-          {
-            "enabled": true,
-            "id": "cad27f65-700a-38a0-896c-3baad8134d3c",
-            "type": "TEAM_PLAYER_STARTBENCH"
-          },
-          {
-            "enabled": true,
-            "id": "2227aba4-0043-36ca-b527-327318cb65cd",
-            "type": "TEAM_TRADE_OFFER"
-          },
-          {
-            "enabled": true,
-            "id": "9d7c7b63-2ded-31d8-81d4-a64df60c48cd",
-            "type": "DRAFT"
-          },
-          {
-            "enabled": true,
-            "id": "c8f02c80-86aa-39bd-9f00-2097c2b8f5ee",
-            "type": "TEAM_MATCHUP_SCORE"
-          },
-          {
-            "enabled": true,
-            "id": "6eeca06a-dea0-3915-ac99-ab9f55813f3a",
-            "type": "KEY_PLAY"
-          },
-          {
-            "enabled": true,
-            "id": "e5de307f-0880-327f-b65b-2e1939459c77",
-            "type": "REDZONE"
-          },
-          {
-            "enabled": true,
-            "id": "f74c81b0-68ce-300c-afd9-bbd7f7018f33",
-            "type": "ADD_DROP"
-          },
-          {
-            "enabled": true,
-            "id": "44204e14-8c30-3a09-815f-d514cb183ae3",
-            "type": "WEEKLY_RECAP"
-          },
-          {
-            "enabled": true,
-            "id": "ec2b1319-74a5-3449-9c83-f4cd00431544",
-            "type": "WAIVERS"
-          },
-          {
-            "enabled": true,
-            "id": "a8ba839c-51f9-30fe-8826-097e7656108b",
-            "type": "CELEBRATION_SHARE"
-          }
-        ]
-      }
+      "owner": "David Brown"
     },
     {
       "id": 7,
       "name": "Wawa Warriors",
       "abbrev": "WAWA",
-      "owner": {
-        "displayName": "joshtyson85",
-        "firstName": "Josh",
-        "id": "{C030DBC8-E7FF-4728-8BA6-20DBB091D3DF}",
-        "lastName": "Tyson",
-        "notificationSettings": [
-          {
-            "enabled": true,
-            "id": "d67b60d5-3182-38e9-8827-4bdf1a4f3774",
-            "type": "TEAM_PLAYER_INJURY"
-          },
-          {
-            "enabled": true,
-            "id": "94cc119b-3e48-3eb2-8387-f86ff89021cf",
-            "type": "TEAM_PLAYER_AVAILABILITY"
-          },
-          {
-            "enabled": true,
-            "id": "f78fd799-0f09-3d24-9620-e70117e150ed",
-            "type": "TEAM_PLAYER_NEWS"
-          },
-          {
-            "enabled": true,
-            "id": "399445f7-d89c-31e2-8ff1-2db535a0aafc",
-            "type": "TEAM_PLAYER_STARTBENCH"
-          },
-          {
-            "enabled": true,
-            "id": "4d7bed4b-5a9a-3dfc-a5eb-20d028a2c02d",
-            "type": "TEAM_TRADE_OFFER"
-          },
-          {
-            "enabled": true,
-            "id": "ff152b20-e995-38b4-a5d7-c12e17fc8a72",
-            "type": "DRAFT"
-          },
-          {
-            "enabled": true,
-            "id": "b82c4045-ab9a-3f92-90d4-b8b539f01742",
-            "type": "TEAM_MATCHUP_SCORE"
-          },
-          {
-            "enabled": true,
-            "id": "504212cb-13e8-33ef-be45-fd7d9b6f9ade",
-            "type": "KEY_PLAY"
-          },
-          {
-            "enabled": true,
-            "id": "bf250b7a-65c3-3e4c-b662-0f6de2b0a901",
-            "type": "REDZONE"
-          },
-          {
-            "enabled": true,
-            "id": "c1e47f09-fb28-3f52-bd58-a43bb2517197",
-            "type": "ADD_DROP"
-          },
-          {
-            "enabled": true,
-            "id": "1ee8c3e0-c710-38f3-ba60-c31855c12fdd",
-            "type": "WEEKLY_RECAP"
-          },
-          {
-            "enabled": true,
-            "id": "e8a077c2-7e45-36e8-92b9-4c52acd895a7",
-            "type": "WAIVERS"
-          },
-          {
-            "enabled": true,
-            "id": "cbaf576e-4e1e-3b81-b363-4a93cfc1f163",
-            "type": "CELEBRATION_SHARE"
-          }
-        ]
-      }
+      "owner": "Josh Tyson"
     },
     {
       "id": 8,
       "name": "The Running Man",
       "abbrev": "RUN",
-      "owner": {
-        "displayName": "jefftack",
-        "firstName": "Jeff",
-        "id": "{6B84CDD1-AE54-11D4-820D-00A0C9E58E2D}",
-        "lastName": "Tack",
-        "notificationSettings": [
-          {
-            "enabled": true,
-            "id": "9bb79351-ee7a-36fd-9dee-6f4b056737f8",
-            "type": "TEAM_PLAYER_INJURY"
-          },
-          {
-            "enabled": true,
-            "id": "b32acea6-9a42-3cc1-b0cd-d356745f52e4",
-            "type": "TEAM_PLAYER_AVAILABILITY"
-          },
-          {
-            "enabled": true,
-            "id": "3064c49b-dbc2-3b3e-ae55-cc7f422be820",
-            "type": "TEAM_PLAYER_NEWS"
-          },
-          {
-            "enabled": true,
-            "id": "92ed273b-76b6-3bd9-9926-01f33f14aeeb",
-            "type": "TEAM_PLAYER_STARTBENCH"
-          },
-          {
-            "enabled": true,
-            "id": "008055b9-6172-3849-9532-0f0da79c9d37",
-            "type": "TEAM_TRADE_OFFER"
-          },
-          {
-            "enabled": true,
-            "id": "26a5cc86-dd8c-3c1f-9767-dcf9edee5256",
-            "type": "DRAFT"
-          },
-          {
-            "enabled": true,
-            "id": "5449573a-09ca-3690-9965-f237aaffc50b",
-            "type": "TEAM_MATCHUP_SCORE"
-          },
-          {
-            "enabled": true,
-            "id": "87aaf795-a673-35b1-b5de-be84493ad591",
-            "type": "KEY_PLAY"
-          },
-          {
-            "enabled": true,
-            "id": "4d814afb-a263-3df8-ad57-3adac800227f",
-            "type": "REDZONE"
-          },
-          {
-            "enabled": true,
-            "id": "68bdb3eb-049b-3589-b85b-f7130ba9d0b1",
-            "type": "ADD_DROP"
-          },
-          {
-            "enabled": true,
-            "id": "444e5d0a-99e1-3784-9fa7-d09100cb782a",
-            "type": "WEEKLY_RECAP"
-          },
-          {
-            "enabled": true,
-            "id": "3e7f8ba4-bd1d-3348-a46c-31dc98b35603",
-            "type": "WAIVERS"
-          },
-          {
-            "enabled": true,
-            "id": "59443606-d11b-3765-b8ee-2a8ca46e5338",
-            "type": "CELEBRATION_SHARE"
-          }
-        ]
-      }
+      "owner": "Jeff Tack"
     },
     {
       "id": 9,
       "name": "Chase the Rainbow",
       "abbrev": "JACE",
-      "owner": {
-        "displayName": "JaceJackson14",
-        "firstName": "Jace",
-        "id": "{13884FCA-C7F4-474F-884F-CAC7F4574F1A}",
-        "lastName": "Jackson",
-        "notificationSettings": [
-          {
-            "enabled": true,
-            "id": "8d8ce5b4-c969-33b7-85b2-af2166441ca9",
-            "type": "TEAM_PLAYER_INJURY"
-          },
-          {
-            "enabled": true,
-            "id": "8236e229-6ed3-38d7-baa7-a5831b88607b",
-            "type": "TEAM_PLAYER_AVAILABILITY"
-          },
-          {
-            "enabled": true,
-            "id": "ec9ba237-5b11-357a-b1f5-9cd1a4028d72",
-            "type": "TEAM_PLAYER_NEWS"
-          },
-          {
-            "enabled": true,
-            "id": "ecdb2124-feb6-346f-b693-a73e1c3567ef",
-            "type": "TEAM_PLAYER_STARTBENCH"
-          },
-          {
-            "enabled": true,
-            "id": "a1b8a720-d7d4-3856-8cc0-2cf4146ba7f9",
-            "type": "TEAM_TRADE_OFFER"
-          },
-          {
-            "enabled": true,
-            "id": "36be4874-1f84-3088-89ed-4686fb9f6f30",
-            "type": "DRAFT"
-          },
-          {
-            "enabled": true,
-            "id": "20188386-e690-3966-87f0-35f7e02358cb",
-            "type": "TEAM_MATCHUP_SCORE"
-          },
-          {
-            "enabled": true,
-            "id": "cdfe0116-411d-3c76-8bf0-fc57eb3b5987",
-            "type": "KEY_PLAY"
-          },
-          {
-            "enabled": true,
-            "id": "4033ce2e-5283-3655-b717-37b1014b3272",
-            "type": "REDZONE"
-          },
-          {
-            "enabled": true,
-            "id": "548f0141-6172-3258-84bb-22421371c248",
-            "type": "ADD_DROP"
-          },
-          {
-            "enabled": true,
-            "id": "34e3f4a3-0c0c-3d11-ae56-dfcdfd4ec07f",
-            "type": "WEEKLY_RECAP"
-          },
-          {
-            "enabled": true,
-            "id": "859bafd0-c2d0-3f05-b1f4-648d9ee13cbf",
-            "type": "WAIVERS"
-          },
-          {
-            "enabled": true,
-            "id": "d3021217-c0c8-37c6-88cd-889f921f4d02",
-            "type": "CELEBRATION_SHARE"
-          }
-        ]
-      }
+      "owner": "Jace Jackson"
     },
     {
       "id": 10,
       "name": "The Tortured Touchdown Dept",
       "abbrev": "TTDD",
-      "owner": {
-        "displayName": "espn41515688",
-        "firstName": "Logan",
-        "id": "{2EECF31A-D8DB-49C6-ACF3-1AD8DB49C651}",
-        "lastName": "Caldwell",
-        "notificationSettings": [
-          {
-            "enabled": true,
-            "id": "bab01e48-bf41-3e2d-bb8f-a5d22bdb06e2",
-            "type": "TEAM_PLAYER_INJURY"
-          },
-          {
-            "enabled": true,
-            "id": "cbf68e05-d615-31c8-b1f2-3f2eed673d36",
-            "type": "TEAM_PLAYER_AVAILABILITY"
-          },
-          {
-            "enabled": true,
-            "id": "f44edccf-e63a-3fa3-a827-03b84f7ac208",
-            "type": "TEAM_PLAYER_NEWS"
-          },
-          {
-            "enabled": true,
-            "id": "d7213fa3-1b63-39fd-aef9-a107ca6ce089",
-            "type": "TEAM_PLAYER_STARTBENCH"
-          },
-          {
-            "enabled": true,
-            "id": "a895d39a-14ef-356a-9954-9769f762370d",
-            "type": "TEAM_TRADE_OFFER"
-          },
-          {
-            "enabled": true,
-            "id": "2bf0c1fd-3961-3630-8777-cd8b2143b665",
-            "type": "DRAFT"
-          },
-          {
-            "enabled": true,
-            "id": "d0cbcdd2-68c1-33fa-b500-7071175537d7",
-            "type": "TEAM_MATCHUP_SCORE"
-          },
-          {
-            "enabled": true,
-            "id": "fc22dd2d-5352-3ec1-8e57-0d9e73ca0476",
-            "type": "KEY_PLAY"
-          },
-          {
-            "enabled": true,
-            "id": "3e0713fe-ae27-3630-be1d-2cd3999824f4",
-            "type": "REDZONE"
-          },
-          {
-            "enabled": true,
-            "id": "7fbfbb2e-19da-3d27-8d14-a1a8b75f3e5e",
-            "type": "ADD_DROP"
-          },
-          {
-            "enabled": true,
-            "id": "1cb38223-0581-3965-a0c8-2de247b7f234",
-            "type": "WEEKLY_RECAP"
-          },
-          {
-            "enabled": true,
-            "id": "f2394020-8cb4-3553-ad0a-56cdf8bf77ec",
-            "type": "WAIVERS"
-          },
-          {
-            "enabled": true,
-            "id": "8f03d9bf-2f28-3380-9bca-3c2e0d8f24f7",
-            "type": "CELEBRATION_SHARE"
-          }
-        ]
-      }
+      "owner": "Logan Caldwell"
     }
   ],
   "schedule": {
     "1": [
       [
-        1
+        1,
+        8
+      ],
+      [
+        2,
+        7
       ],
       [
         3,
-        4
-      ],
-      [
-        5,
         6
       ],
       [
-        7,
-        8
+        4,
+        5
       ],
       [
         9,
@@ -807,6 +88,28 @@
       ]
     ],
     "2": [
+      [
+        1,
+        6
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        7,
+        10
+      ],
+      [
+        8,
+        9
+      ]
+    ],
+    "3": [
       [
         1,
         3
@@ -817,37 +120,15 @@
       ],
       [
         4,
-        7
+        10
       ],
       [
         6,
         9
       ],
       [
-        8,
-        10
-      ]
-    ],
-    "3": [
-      [
-        1,
-        4
-      ],
-      [
-        2,
-        6
-      ],
-      [
-        3,
-        8
-      ],
-      [
-        5,
-        9
-      ],
-      [
         7,
-        10
+        8
       ]
     ],
     "4": [
@@ -857,7 +138,7 @@
       ],
       [
         2,
-        7
+        10
       ],
       [
         3,
@@ -865,17 +146,17 @@
       ],
       [
         4,
-        6
+        8
       ],
       [
-        8,
-        10
+        6,
+        7
       ]
     ],
     "5": [
       [
         1,
-        6
+        9
       ],
       [
         2,
@@ -883,15 +164,15 @@
       ],
       [
         3,
-        10
+        7
       ],
       [
         4,
-        5
+        6
       ],
       [
-        7,
-        9
+        5,
+        10
       ]
     ],
     "6": [
@@ -901,33 +182,51 @@
       ],
       [
         2,
-        9
+        6
       ],
       [
         3,
-        5
+        4
       ],
       [
-        4,
-        8
+        5,
+        9
       ],
       [
-        6,
+        8,
         10
       ]
     ],
     "7": [
       [
         1,
-        8
+        4
       ],
       [
         2,
+        3
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        6,
         10
       ],
       [
+        7,
+        9
+      ]
+    ],
+    "8": [
+      [
+        1,
+        2
+      ],
+      [
         3,
-        6
+        10
       ],
       [
         4,
@@ -936,24 +235,6 @@
       [
         5,
         7
-      ]
-    ],
-    "8": [
-      [
-        1,
-        9
-      ],
-      [
-        2,
-        4
-      ],
-      [
-        3,
-        7
-      ],
-      [
-        5,
-        10
       ],
       [
         6,
@@ -967,37 +248,37 @@
       ],
       [
         2,
-        3
+        9
       ],
       [
-        4,
-        10
-      ],
-      [
-        5,
+        3,
         8
       ],
       [
-        6,
+        4,
         7
+      ],
+      [
+        5,
+        6
       ]
     ],
     "10": [
       [
         1,
-        2
+        8
+      ],
+      [
+        2,
+        7
       ],
       [
         3,
-        4
-      ],
-      [
-        5,
         6
       ],
       [
-        7,
-        8
+        4,
+        5
       ],
       [
         9,
@@ -1007,6 +288,28 @@
     "11": [
       [
         1,
+        6
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        7,
+        10
+      ],
+      [
+        8,
+        9
+      ]
+    ],
+    "12": [
+      [
+        1,
         3
       ],
       [
@@ -1015,37 +318,15 @@
       ],
       [
         4,
-        7
+        10
       ],
       [
         6,
         9
       ],
       [
-        8,
-        10
-      ]
-    ],
-    "12": [
-      [
-        1,
-        4
-      ],
-      [
-        2,
-        6
-      ],
-      [
-        3,
-        8
-      ],
-      [
-        5,
-        9
-      ],
-      [
         7,
-        10
+        8
       ]
     ],
     "13": [
@@ -1055,7 +336,7 @@
       ],
       [
         2,
-        7
+        10
       ],
       [
         3,
@@ -1063,11 +344,11 @@
       ],
       [
         4,
-        6
+        8
       ],
       [
-        8,
-        10
+        6,
+        7
       ]
     ]
   },
