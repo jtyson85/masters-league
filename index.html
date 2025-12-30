@@ -8,15 +8,12 @@
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <style>
-    body { background: #0f172a; }
-  </style>
+  <style>body { background: #0f172a; }</style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
-
     const CONFIG = { regularSeasonWeeks: 13 };
 
     function calculateStandings(teams, weeklyData, schedule) {
@@ -24,35 +21,24 @@
       teams.forEach(t => {
         standings[t.id] = { ...t, totalVP: 0, h2hVP: 0, ptsVP: 0, totalPts: 0, wins: 0, losses: 0, ties: 0, weeklyResults: [] };
       });
-
       weeklyData.forEach(week => {
         const scores = week.scores;
         const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-
         const processMatchup = (home, away) => {
           const hs = scores[home] || scores[String(home)];
           const as = scores[away] || scores[String(away)];
-          if (hs > as) {
-            standings[home].h2hVP += 2; standings[home].wins += 1; standings[away].losses += 1;
-          } else if (as > hs) {
-            standings[away].h2hVP += 2; standings[away].wins += 1; standings[home].losses += 1;
-          } else {
-            standings[home].h2hVP += 1; standings[away].h2hVP += 1;
-            standings[home].ties += 1; standings[away].ties += 1;
-          }
+          if (hs > as) { standings[home].h2hVP += 2; standings[home].wins += 1; standings[away].losses += 1; }
+          else if (as > hs) { standings[away].h2hVP += 2; standings[away].wins += 1; standings[home].losses += 1; }
+          else { standings[home].h2hVP += 1; standings[away].h2hVP += 1; standings[home].ties += 1; standings[away].ties += 1; }
         };
-
         week.espnMatchups.forEach(([h, a]) => processMatchup(h, a));
         const weekSchedule = schedule[String(week.week)];
         if (weekSchedule) weekSchedule.forEach(([h, a]) => processMatchup(h, a));
-
-        // Points VP: 2 for top 3, 1 for 4-6, 0 for 7-10
         sorted.forEach(([id], rank) => {
           const tid = parseInt(id);
           if (rank < 3) standings[tid].ptsVP += 2;
           else if (rank < 6) standings[tid].ptsVP += 1;
         });
-
         Object.keys(standings).forEach(id => {
           const tid = parseInt(id);
           const score = scores[tid] || scores[String(tid)] || 0;
@@ -61,14 +47,13 @@
           standings[tid].weeklyResults.push({ week: week.week, score, rank });
         });
       });
-
       Object.values(standings).forEach(t => { t.totalVP = t.h2hVP + t.ptsVP; });
       return Object.values(standings).sort((a, b) => b.totalVP - a.totalVP || b.totalPts - a.totalPts);
     }
 
     function calculateProjections(standings, weeksPlayed, totalWeeks) {
       const weeksLeft = totalWeeks - weeksPlayed;
-      const maxVPPerWeek = 6; // 2 H2H wins × 2 pts + top 3 bonus (2 pts) = 6
+      const maxVPPerWeek = 6;
       return standings.map((team, idx) => {
         const maxPossible = team.totalVP + (weeksLeft * maxVPPerWeek);
         let status = "";
@@ -83,39 +68,24 @@
       return (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-slate-700 text-slate-400">
-                <th className="text-left py-3 px-2">Seed</th>
-                <th className="text-left py-3 px-2">Team</th>
-                <th className="text-center py-3 px-2">VP</th>
-                <th className="text-center py-3 px-2 hidden sm:table-cell">H2H</th>
-                <th className="text-center py-3 px-2 hidden sm:table-cell">Pts</th>
-                <th className="text-center py-3 px-2 hidden md:table-cell">Record</th>
-                <th className="text-right py-3 px-2">Total Pts</th>
-                <th className="text-center py-3 px-2 hidden lg:table-cell">Status</th>
-              </tr>
-            </thead>
+            <thead><tr className="border-b border-slate-700 text-slate-400">
+              <th className="text-left py-3 px-2">Seed</th><th className="text-left py-3 px-2">Team</th><th className="text-center py-3 px-2">VP</th>
+              <th className="text-center py-3 px-2 hidden sm:table-cell">H2H</th><th className="text-center py-3 px-2 hidden sm:table-cell">Pts</th>
+              <th className="text-center py-3 px-2 hidden md:table-cell">Record</th><th className="text-right py-3 px-2">Total Pts</th>
+              <th className="text-center py-3 px-2 hidden lg:table-cell">Status</th>
+            </tr></thead>
             <tbody>
               {projections.map((team, i) => (
                 <tr key={team.id} className={`border-b border-slate-800 hover:bg-slate-800/50 ${i < 4 ? 'bg-emerald-500/5' : i < 6 ? 'bg-yellow-500/5' : ''}`}>
-                  <td className="py-3 px-2">
-                    <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${i < 4 ? 'bg-emerald-500/20 text-emerald-400' : i < 6 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-700 text-slate-400'}`}>
-                      {i + 1}
-                    </span>
-                  </td>
-                  <td className="py-3 px-2">
-                    <div className="font-medium text-white">{team.name}</div>
-                    <div className="text-xs text-slate-500">{team.owner}</div>
-                  </td>
+                  <td className="py-3 px-2"><span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${i < 4 ? 'bg-emerald-500/20 text-emerald-400' : i < 6 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-700 text-slate-400'}`}>{i + 1}</span></td>
+                  <td className="py-3 px-2"><div className="font-medium text-white">{team.name}</div><div className="text-xs text-slate-500">{team.owner}</div></td>
                   <td className="text-center py-3 px-2"><span className="text-lg font-bold text-white">{team.totalVP}</span></td>
                   <td className="text-center py-3 px-2 text-slate-300 hidden sm:table-cell">{team.h2hVP}</td>
                   <td className="text-center py-3 px-2 text-slate-300 hidden sm:table-cell">{team.ptsVP}</td>
                   <td className="text-center py-3 px-2 text-slate-300 hidden md:table-cell">{team.wins}-{team.losses}{team.ties > 0 ? `-${team.ties}` : ''}</td>
                   <td className="text-right py-3 px-2 text-slate-300">{team.totalPts.toFixed(1)}</td>
                   <td className="text-center py-3 px-2 hidden lg:table-cell">
-                    <span className={`text-xs px-2 py-1 rounded-full ${team.status.includes('Clinched') || team.status.includes('Playoff') ? 'bg-emerald-500/20 text-emerald-400' : team.status === 'Eliminated' ? 'bg-red-500/20 text-red-400' : 'bg-slate-700 text-slate-400'}`}>
-                      {team.status}
-                    </span>
+                    <span className={`text-xs px-2 py-1 rounded-full ${team.status.includes('Clinched') || team.status.includes('Playoff') ? 'bg-emerald-500/20 text-emerald-400' : team.status === 'Eliminated' ? 'bg-red-500/20 text-red-400' : 'bg-slate-700 text-slate-400'}`}>{team.status}</span>
                   </td>
                 </tr>
               ))}
@@ -124,18 +94,8 @@
           <div className="mt-6 p-4 bg-slate-800/50 rounded-lg border border-slate-700">
             <h4 className="text-sm font-medium text-slate-300 mb-2">Victory Points Scoring</h4>
             <div className="grid grid-cols-2 gap-4 text-xs text-slate-400">
-              <div>
-                <div className="font-medium text-slate-300 mb-1">Head-to-Head (2 matchups/week)</div>
-                <div>Win: 2 VP</div>
-                <div>Tie: 1 VP</div>
-                <div>Loss: 0 VP</div>
-              </div>
-              <div>
-                <div className="font-medium text-slate-300 mb-1">Weekly Points Ranking</div>
-                <div>1st-3rd: 2 VP</div>
-                <div>4th-6th: 1 VP</div>
-                <div>7th-10th: 0 VP</div>
-              </div>
+              <div><div className="font-medium text-slate-300 mb-1">Head-to-Head (2 matchups/week)</div><div>Win: 2 VP • Tie: 1 VP • Loss: 0 VP</div></div>
+              <div><div className="font-medium text-slate-300 mb-1">Weekly Points Ranking</div><div>1st-3rd: 2 VP • 4th-6th: 1 VP • 7th-10th: 0 VP</div></div>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2 text-xs mt-4">
@@ -150,77 +110,51 @@
       const weeks = data.weeks.map(w => w.week);
       const weekData = data.weeks.find(w => w.week === selectedWeek);
       if (!weekData) return <div className="text-slate-400 text-center py-8">No data for Week {selectedWeek}</div>;
-
       const scores = weekData.scores;
       const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-
       const allMatchups = [];
       weekData.espnMatchups.forEach(([h, a]) => {
-        const hs = scores[h] || scores[String(h)];
-        const as = scores[a] || scores[String(a)];
+        const hs = scores[h] || scores[String(h)]; const as = scores[a] || scores[String(a)];
         allMatchups.push({ home: h, away: a, homeScore: hs, awayScore: as, source: 'ESPN' });
       });
       const weekSchedule = data.schedule[String(selectedWeek)];
       if (weekSchedule) {
         weekSchedule.forEach(([h, a]) => {
-          const hs = scores[h] || scores[String(h)];
-          const as = scores[a] || scores[String(a)];
+          const hs = scores[h] || scores[String(h)]; const as = scores[a] || scores[String(a)];
           allMatchups.push({ home: h, away: a, homeScore: hs, awayScore: as, source: 'Schedule' });
         });
       }
-
       return (
         <div className="space-y-4">
           <div className="flex gap-2 overflow-x-auto pb-2">
-            {weeks.map(w => (
-              <button key={w} onClick={() => setSelectedWeek(w)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${selectedWeek === w ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>
-                Wk {w}
-              </button>
-            ))}
+            {weeks.map(w => (<button key={w} onClick={() => setSelectedWeek(w)} className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${selectedWeek === w ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>Wk {w}</button>))}
           </div>
-
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <h4 className="text-sm font-medium text-slate-400 mb-3">Matchups (2 VP per win)</h4>
               <div className="grid gap-2">
                 {allMatchups.map((m, i) => {
-                  const home = data.teams.find(t => t.id === m.home);
-                  const away = data.teams.find(t => t.id === m.away);
-                  const homeWon = m.homeScore > m.awayScore;
-                  const awayWon = m.awayScore > m.homeScore;
-                  const isTie = m.homeScore === m.awayScore;
+                  const home = data.teams.find(t => t.id === m.home); const away = data.teams.find(t => t.id === m.away);
+                  const homeWon = m.homeScore > m.awayScore; const awayWon = m.awayScore > m.homeScore; const isTie = m.homeScore === m.awayScore;
                   return (
                     <div key={i} className={`bg-slate-800/50 rounded-lg p-3 border ${m.source === 'ESPN' ? 'border-blue-500/30' : 'border-purple-500/30'}`}>
                       <span className={`text-xs px-2 py-0.5 rounded mb-2 inline-block ${m.source === 'ESPN' ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>{m.source}</span>
                       <div className={`flex justify-between ${homeWon ? 'text-emerald-400' : isTie ? 'text-yellow-400' : 'text-slate-300'}`}>
-                        <span>{home?.abbrev}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold">{m.homeScore?.toFixed(1)}</span>
-                          {homeWon && <span className="text-xs">+2 VP</span>}
-                          {isTie && <span className="text-xs">+1 VP</span>}
-                        </div>
+                        <span>{home?.abbrev}</span><div className="flex items-center gap-2"><span className="font-bold">{m.homeScore?.toFixed(1)}</span>{homeWon && <span className="text-xs">+2 VP</span>}{isTie && <span className="text-xs">+1 VP</span>}</div>
                       </div>
                       <div className={`flex justify-between ${awayWon ? 'text-emerald-400' : isTie ? 'text-yellow-400' : 'text-slate-300'}`}>
-                        <span>{away?.abbrev}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold">{m.awayScore?.toFixed(1)}</span>
-                          {awayWon && <span className="text-xs">+2 VP</span>}
-                          {isTie && <span className="text-xs">+1 VP</span>}
-                        </div>
+                        <span>{away?.abbrev}</span><div className="flex items-center gap-2"><span className="font-bold">{m.awayScore?.toFixed(1)}</span>{awayWon && <span className="text-xs">+2 VP</span>}{isTie && <span className="text-xs">+1 VP</span>}</div>
                       </div>
                     </div>
                   );
                 })}
               </div>
             </div>
-
             <div>
               <h4 className="text-sm font-medium text-slate-400 mb-3">Points Ranking</h4>
               <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
                 {sorted.map(([id, score], i) => {
-                  const team = data.teams.find(t => t.id === parseInt(id));
-                  const vpEarned = i < 3 ? 2 : i < 6 ? 1 : 0;
+                  const team = data.teams.find(t => t.id === parseInt(id)); const vpEarned = i < 3 ? 2 : i < 6 ? 1 : 0;
                   return (
                     <div key={id} className={`flex items-center justify-between py-2 ${i < sorted.length - 1 ? 'border-b border-slate-700' : ''}`}>
                       <div className="flex items-center gap-3">
@@ -243,18 +177,11 @@
 
     function PlayoffMatchup({ title, team1Seed, team2Seed, week1Score, week2Score, winner, seeds, isTwoWeek, weekLabel }) {
       if (!team1Seed || !team2Seed) return null;
-      
-      const t1 = seeds[team1Seed];
-      const t2 = seeds[team2Seed];
-      const t1w1 = week1Score?.[String(team1Seed)];
-      const t1w2 = week2Score?.[String(team1Seed)];
-      const t2w1 = week1Score?.[String(team2Seed)];
-      const t2w2 = week2Score?.[String(team2Seed)];
-      
-      const t1Total = (t1w1 || 0) + (t1w2 || 0);
-      const t2Total = (t2w1 || 0) + (t2w2 || 0);
+      const t1 = seeds[team1Seed]; const t2 = seeds[team2Seed];
+      const t1w1 = week1Score?.[String(team1Seed)]; const t1w2 = week2Score?.[String(team1Seed)];
+      const t2w1 = week1Score?.[String(team2Seed)]; const t2w2 = week2Score?.[String(team2Seed)];
+      const t1Total = (t1w1 || 0) + (t1w2 || 0); const t2Total = (t2w1 || 0) + (t2w2 || 0);
       const hasScores = t1w1 !== null && t1w1 !== undefined;
-      
       return (
         <div className="bg-slate-900/50 rounded-lg p-3">
           <div className="text-xs text-emerald-400 mb-2">{title}</div>
@@ -281,13 +208,9 @@
     }
 
     function Playoffs({ projections, playoffData }) {
-      const seeds = {};
-      projections.forEach((t, i) => { seeds[i + 1] = t; });
-      
-      // Use playoff data if available, otherwise show projections
+      const seeds = {}; projections.forEach((t, i) => { seeds[i + 1] = t; });
       const hasPlayoffData = playoffData && playoffData.championship;
-      const champ = playoffData?.championship;
-      const cons = playoffData?.consolation;
+      const champ = playoffData?.championship; const cons = playoffData?.consolation;
 
       return (
         <div className="space-y-6">
@@ -298,84 +221,25 @@
               <div className="grid md:grid-cols-2 gap-4">
                 {hasPlayoffData ? (
                   <>
-                    <PlayoffMatchup
-                      title="Semifinal 1"
-                      team1Seed={1}
-                      team2Seed={4}
-                      week1Score={champ.semifinal1.week14Score}
-                      week2Score={champ.semifinal1.week15Score}
-                      winner={champ.semifinal1.winner}
-                      seeds={seeds}
-                      isTwoWeek={true}
-                      weekLabel="Weeks 14-15"
-                    />
-                    <PlayoffMatchup
-                      title="Semifinal 2"
-                      team1Seed={2}
-                      team2Seed={3}
-                      week1Score={champ.semifinal2.week14Score}
-                      week2Score={champ.semifinal2.week15Score}
-                      winner={champ.semifinal2.winner}
-                      seeds={seeds}
-                      isTwoWeek={true}
-                      weekLabel="Weeks 14-15"
-                    />
+                    <PlayoffMatchup title="Semifinal 1" team1Seed={1} team2Seed={4} week1Score={champ.semifinal1.week14Score} week2Score={champ.semifinal1.week15Score} winner={champ.semifinal1.winner} seeds={seeds} isTwoWeek={true} weekLabel="Weeks 14-15" />
+                    <PlayoffMatchup title="Semifinal 2" team1Seed={2} team2Seed={3} week1Score={champ.semifinal2.week14Score} week2Score={champ.semifinal2.week15Score} winner={champ.semifinal2.winner} seeds={seeds} isTwoWeek={true} weekLabel="Weeks 14-15" />
                   </>
                 ) : (
                   <>
-                    <div className="bg-slate-900/50 rounded-lg p-3">
-                      <div className="text-xs text-emerald-400 mb-2">Semifinal 1</div>
-                      <div className="flex justify-between py-2 border-b border-slate-700 text-white">
-                        <span>(1) {seeds[1]?.name}</span><span className="text-slate-400">{seeds[1]?.totalVP} VP</span>
-                      </div>
-                      <div className="flex justify-between py-2 text-white">
-                        <span>(4) {seeds[4]?.name}</span><span className="text-slate-400">{seeds[4]?.totalVP} VP</span>
-                      </div>
-                    </div>
-                    <div className="bg-slate-900/50 rounded-lg p-3">
-                      <div className="text-xs text-emerald-400 mb-2">Semifinal 2</div>
-                      <div className="flex justify-between py-2 border-b border-slate-700 text-white">
-                        <span>(2) {seeds[2]?.name}</span><span className="text-slate-400">{seeds[2]?.totalVP} VP</span>
-                      </div>
-                      <div className="flex justify-between py-2 text-white">
-                        <span>(3) {seeds[3]?.name}</span><span className="text-slate-400">{seeds[3]?.totalVP} VP</span>
-                      </div>
-                    </div>
+                    <div className="bg-slate-900/50 rounded-lg p-3"><div className="text-xs text-emerald-400 mb-2">Semifinal 1</div><div className="flex justify-between py-2 border-b border-slate-700 text-white"><span>(1) {seeds[1]?.name}</span><span className="text-slate-400">{seeds[1]?.totalVP} VP</span></div><div className="flex justify-between py-2 text-white"><span>(4) {seeds[4]?.name}</span><span className="text-slate-400">{seeds[4]?.totalVP} VP</span></div></div>
+                    <div className="bg-slate-900/50 rounded-lg p-3"><div className="text-xs text-emerald-400 mb-2">Semifinal 2</div><div className="flex justify-between py-2 border-b border-slate-700 text-white"><span>(2) {seeds[2]?.name}</span><span className="text-slate-400">{seeds[2]?.totalVP} VP</span></div><div className="flex justify-between py-2 text-white"><span>(3) {seeds[3]?.name}</span><span className="text-slate-400">{seeds[3]?.totalVP} VP</span></div></div>
                   </>
                 )}
               </div>
-              
-              {/* Championship Final */}
               <div className="mt-4">
                 {hasPlayoffData && champ.final.team1Seed && champ.final.team2Seed ? (
-                  <PlayoffMatchup
-                    title="🏆 Championship Final"
-                    team1Seed={champ.final.team1Seed}
-                    team2Seed={champ.final.team2Seed}
-                    week1Score={champ.final.week16Score}
-                    week2Score={champ.final.week17Score}
-                    winner={champ.final.winner}
-                    seeds={seeds}
-                    isTwoWeek={true}
-                    weekLabel="Weeks 16-17"
-                  />
+                  <PlayoffMatchup title="🏆 Championship Final" team1Seed={champ.final.team1Seed} team2Seed={champ.final.team2Seed} week1Score={champ.final.week16Score} week2Score={champ.final.week17Score} winner={champ.final.winner} seeds={seeds} isTwoWeek={true} weekLabel="Weeks 16-17" />
                 ) : (
-                  <div className="text-center">
-                    <div className="inline-block bg-yellow-500/20 rounded-lg px-4 py-2">
-                      <div className="text-xs text-yellow-400">Championship (Weeks 16-17)</div>
-                      <div className="text-slate-300 text-sm mt-1">Winners meet for the title</div>
-                    </div>
-                  </div>
+                  <div className="text-center"><div className="inline-block bg-yellow-500/20 rounded-lg px-4 py-2"><div className="text-xs text-yellow-400">Championship (Weeks 16-17)</div><div className="text-slate-300 text-sm mt-1">Winners meet for the title</div></div></div>
                 )}
               </div>
-              
               {champ?.final?.winner && (
-                <div className="mt-4 text-center">
-                  <div className="inline-block bg-yellow-500/30 rounded-lg px-6 py-3">
-                    <div className="text-yellow-400 text-lg font-bold">🏆 CHAMPION 🏆</div>
-                    <div className="text-white text-xl mt-1">{seeds[champ.final.winner]?.name}</div>
-                  </div>
-                </div>
+                <div className="mt-4 text-center"><div className="inline-block bg-yellow-500/30 rounded-lg px-6 py-3"><div className="text-yellow-400 text-lg font-bold">🏆 CHAMPION 🏆</div><div className="text-white text-xl mt-1">{seeds[champ.final.winner]?.name}</div></div></div>
               )}
             </div>
           </div>
@@ -383,25 +247,20 @@
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">🏅 Consolation Bracket</h3>
             <div className="bg-slate-800/50 rounded-lg p-4 border border-yellow-500/30 space-y-4">
-              {/* Week 14 */}
               <div>
                 <div className="text-xs text-yellow-400 mb-2">Week 14</div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
                   <div className="bg-slate-900/50 rounded p-2 text-center"><div className="text-slate-400 text-xs">Bye</div><div className="text-white">(5) {seeds[5]?.abbrev}</div></div>
                   <div className="bg-slate-900/50 rounded p-2 text-center"><div className="text-slate-400 text-xs">Bye</div><div className="text-white">(6) {seeds[6]?.abbrev}</div></div>
-                  {hasPlayoffData ? (
+                  {hasPlayoffData && cons ? (
                     <>
-                      <div className={`bg-slate-900/50 rounded p-2 text-center ${cons.week14.match1.winner === 7 ? 'text-emerald-400' : cons.week14.match1.winner === 10 ? 'text-slate-400' : 'text-white'}`}>
-                        (7) {seeds[7]?.abbrev} {cons.week14.match1.score?.["7"]?.toFixed(1) || ''}
-                        <div className={cons.week14.match1.winner === 10 ? 'text-emerald-400' : ''}>
-                          (10) {seeds[10]?.abbrev} {cons.week14.match1.score?.["10"]?.toFixed(1) || ''}
-                        </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={cons.week14.match1.winner === 7 ? 'text-emerald-400' : 'text-white'}>(7) {seeds[7]?.abbrev} {cons.week14.match1.score?.["7"]?.toFixed(1) || ''}</div>
+                        <div className={cons.week14.match1.winner === 10 ? 'text-emerald-400' : 'text-white'}>(10) {seeds[10]?.abbrev} {cons.week14.match1.score?.["10"]?.toFixed(1) || ''}</div>
                       </div>
-                      <div className={`bg-slate-900/50 rounded p-2 text-center ${cons.week14.match2.winner === 8 ? 'text-emerald-400' : cons.week14.match2.winner === 9 ? 'text-slate-400' : 'text-white'}`}>
-                        (8) {seeds[8]?.abbrev} {cons.week14.match2.score?.["8"]?.toFixed(1) || ''}
-                        <div className={cons.week14.match2.winner === 9 ? 'text-emerald-400' : ''}>
-                          (9) {seeds[9]?.abbrev} {cons.week14.match2.score?.["9"]?.toFixed(1) || ''}
-                        </div>
+                      <div className="bg-slate-900/50 rounded p-2 text-center">
+                        <div className={cons.week14.match2.winner === 8 ? 'text-emerald-400' : 'text-white'}>(8) {seeds[8]?.abbrev} {cons.week14.match2.score?.["8"]?.toFixed(1) || ''}</div>
+                        <div className={cons.week14.match2.winner === 9 ? 'text-emerald-400' : 'text-white'}>(9) {seeds[9]?.abbrev} {cons.week14.match2.score?.["9"]?.toFixed(1) || ''}</div>
                       </div>
                     </>
                   ) : (
@@ -412,63 +271,24 @@
                   )}
                 </div>
               </div>
-              
-              {/* Week 15 */}
               <div>
                 <div className="text-xs text-yellow-400 mb-2">Week 15</div>
-                {hasPlayoffData && cons.week15.match1.team2Seed ? (
+                {hasPlayoffData && cons && cons.week15.match1.team2Seed ? (
                   <div className="grid md:grid-cols-2 gap-2">
-                    <PlayoffMatchup
-                      title={`(5) vs (${cons.week15.match1.team2Seed})`}
-                      team1Seed={5}
-                      team2Seed={cons.week15.match1.team2Seed}
-                      week1Score={cons.week15.match1.score}
-                      week2Score={{}}
-                      winner={cons.week15.match1.winner}
-                      seeds={seeds}
-                      isTwoWeek={false}
-                    />
-                    <PlayoffMatchup
-                      title={`(6) vs (${cons.week15.match2.team2Seed})`}
-                      team1Seed={6}
-                      team2Seed={cons.week15.match2.team2Seed}
-                      week1Score={cons.week15.match2.score}
-                      week2Score={{}}
-                      winner={cons.week15.match2.winner}
-                      seeds={seeds}
-                      isTwoWeek={false}
-                    />
+                    <PlayoffMatchup title={`(5) vs (${cons.week15.match1.team2Seed})`} team1Seed={5} team2Seed={cons.week15.match1.team2Seed} week1Score={cons.week15.match1.score} week2Score={{}} winner={cons.week15.match1.winner} seeds={seeds} isTwoWeek={false} />
+                    <PlayoffMatchup title={`(6) vs (${cons.week15.match2.team2Seed})`} team1Seed={6} team2Seed={cons.week15.match2.team2Seed} week1Score={cons.week15.match2.score} week2Score={{}} winner={cons.week15.match2.winner} seeds={seeds} isTwoWeek={false} />
                   </div>
                 ) : (
-                  <>
-                    <div className="text-slate-300 text-sm">(5) vs lowest seed winner • (6) vs highest seed winner</div>
-                    <div className="text-slate-500 text-xs mt-1">Losers begin Toilet Bowl (2-week matchup)</div>
-                  </>
+                  <><div className="text-slate-300 text-sm">(5) vs lowest seed winner • (6) vs highest seed winner</div><div className="text-slate-500 text-xs mt-1">Losers begin Toilet Bowl (2-week matchup)</div></>
                 )}
               </div>
-              
-              {/* Finals */}
               <div className="grid md:grid-cols-2 gap-4">
-                {hasPlayoffData && cons.final.team1Seed && cons.final.team2Seed ? (
-                  <PlayoffMatchup
-                    title="🏅 Consolation Final"
-                    team1Seed={cons.final.team1Seed}
-                    team2Seed={cons.final.team2Seed}
-                    week1Score={cons.final.week16Score}
-                    week2Score={cons.final.week17Score}
-                    winner={cons.final.winner}
-                    seeds={seeds}
-                    isTwoWeek={true}
-                    weekLabel="Weeks 16-17"
-                  />
+                {hasPlayoffData && cons && cons.final.team1Seed && cons.final.team2Seed ? (
+                  <PlayoffMatchup title="🏅 Consolation Final" team1Seed={cons.final.team1Seed} team2Seed={cons.final.team2Seed} week1Score={cons.final.week16Score} week2Score={cons.final.week17Score} winner={cons.final.winner} seeds={seeds} isTwoWeek={true} weekLabel="Weeks 16-17" />
                 ) : (
-                  <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-600">
-                    <div className="text-xs text-slate-400">Consolation Final (Wk 16-17)</div>
-                    <div className="text-white text-sm">Week 15 winners</div>
-                  </div>
+                  <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-600"><div className="text-xs text-slate-400">Consolation Final (Wk 16-17)</div><div className="text-white text-sm">Week 15 winners</div></div>
                 )}
-                
-                {hasPlayoffData && cons.toiletBowl.team1Seed && cons.toiletBowl.team2Seed ? (
+                {hasPlayoffData && cons && cons.toiletBowl.team1Seed && cons.toiletBowl.team2Seed ? (
                   <div className="bg-slate-900/50 rounded-lg p-3 border border-red-500/30">
                     <div className="text-xs text-red-400 mb-2">💀 Toilet Bowl (Weeks 16-17)</div>
                     <div className="text-slate-400 text-xs mb-2">Loser "wins"</div>
@@ -483,10 +303,7 @@
                     {cons.toiletBowl.loser && <div className="text-xs text-red-400 mt-2 text-center">💀 Winner: ({cons.toiletBowl.loser}) {seeds[cons.toiletBowl.loser]?.name}</div>}
                   </div>
                 ) : (
-                  <div className="bg-slate-900/50 rounded-lg p-3 border border-red-500/30">
-                    <div className="text-xs text-red-400">💀 Toilet Bowl (Wk 16-17)</div>
-                    <div className="text-slate-300 text-sm">Loser "wins"</div>
-                  </div>
+                  <div className="bg-slate-900/50 rounded-lg p-3 border border-red-500/30"><div className="text-xs text-red-400">💀 Toilet Bowl (Wk 16-17)</div><div className="text-slate-300 text-sm">Loser "wins"</div></div>
                 )}
               </div>
             </div>
@@ -496,27 +313,13 @@
             <h3 className="text-lg font-semibold text-white mb-4">📊 Final Standings</h3>
             <div className="bg-slate-800/50 rounded-lg border border-slate-700 overflow-hidden">
               <table className="w-full text-sm">
-                <thead className="bg-slate-800">
-                  <tr className="text-slate-400">
-                    <th className="text-left py-2 px-3">Seed</th>
-                    <th className="text-left py-2 px-3">Team</th>
-                    <th className="text-center py-2 px-3">VP</th>
-                    <th className="text-center py-2 px-3">Total Pts</th>
-                    <th className="text-center py-2 px-3">Bracket</th>
-                  </tr>
-                </thead>
+                <thead className="bg-slate-800"><tr className="text-slate-400"><th className="text-left py-2 px-3">Seed</th><th className="text-left py-2 px-3">Team</th><th className="text-center py-2 px-3">VP</th><th className="text-center py-2 px-3">Total Pts</th><th className="text-center py-2 px-3">Bracket</th></tr></thead>
                 <tbody>
                   {projections.map((team, i) => (
                     <tr key={team.id} className="border-t border-slate-700">
-                      <td className="py-2 px-3 text-slate-400">{i + 1}</td>
-                      <td className="py-2 px-3 text-white">{team.name}</td>
-                      <td className="text-center py-2 px-3 text-slate-300">{team.totalVP}</td>
-                      <td className="text-center py-2 px-3 text-slate-400">{team.totalPts?.toFixed(1)}</td>
-                      <td className="text-center py-2 px-3">
-                        <span className={`text-xs px-2 py-1 rounded-full ${i < 4 ? 'bg-emerald-500/20 text-emerald-400' : i < 6 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-700 text-slate-400'}`}>
-                          {i < 4 ? 'Championship' : i < 6 ? 'Consolation (Bye)' : 'Consolation'}
-                        </span>
-                      </td>
+                      <td className="py-2 px-3 text-slate-400">{i + 1}</td><td className="py-2 px-3 text-white">{team.name}</td>
+                      <td className="text-center py-2 px-3 text-slate-300">{team.totalVP}</td><td className="text-center py-2 px-3 text-slate-400">{team.totalPts?.toFixed(1)}</td>
+                      <td className="text-center py-2 px-3"><span className={`text-xs px-2 py-1 rounded-full ${i < 4 ? 'bg-emerald-500/20 text-emerald-400' : i < 6 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-700 text-slate-400'}`}>{i < 4 ? 'Championship' : i < 6 ? 'Consolation (Bye)' : 'Consolation'}</span></td>
                     </tr>
                   ))}
                 </tbody>
@@ -541,48 +344,36 @@
       }, []);
 
       const standings = useMemo(() => {
+        if (!data) return [];
         if (data.standings) return data.standings;
-        return data ? calculateStandings(data.teams, data.weeks, data.schedule) : [];
+        return calculateStandings(data.teams, data.weeks, data.schedule);
       }, [data]);
-      const projections = useMemo(() => data ? calculateProjections(standings, data.weeks.length, CONFIG.regularSeasonWeeks) : [], [standings, data]);
+      const projections = useMemo(() => {
+        if (!data || !standings.length) return [];
+        return calculateProjections(standings, data.weeks.length, CONFIG.regularSeasonWeeks);
+      }, [standings, data]);
 
       if (loading) return <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">Loading...</div>;
       if (!data) return <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">Failed to load data.json</div>;
 
-      const tabs = [
-        { id: 'standings', label: 'Standings' },
-        { id: 'matchups', label: 'Matchups' },
-        { id: 'playoffs', label: 'Playoffs' },
-      ];
+      const tabs = [{ id: 'standings', label: 'Standings' }, { id: 'matchups', label: 'Matchups' }, { id: 'playoffs', label: 'Playoffs' }];
 
       return (
         <div className="min-h-screen bg-slate-900 text-white p-3 md:p-6">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-6">
-              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-400 via-emerald-400 to-blue-500 bg-clip-text text-transparent">
-                {data.leagueName}
-              </h1>
-              <p className="text-slate-400 mt-1">{data.year} Season • Week {data.weeks.length} of {CONFIG.regularSeasonWeeks}</p>
+              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-400 via-emerald-400 to-blue-500 bg-clip-text text-transparent">{data.leagueName}</h1>
+              <p className="text-slate-400 mt-1">{data.year} Season • Week {data.currentWeek || data.weeks.length}</p>
             </div>
-
             <div className="flex gap-1 mb-6 bg-slate-800 p-1 rounded-lg">
-              {tabs.map(tab => (
-                <button key={tab.id} onClick={() => setView(tab.id)}
-                  className={`flex-1 py-2 px-3 rounded-md text-sm font-medium ${view === tab.id ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'}`}>
-                  {tab.label}
-                </button>
-              ))}
+              {tabs.map(tab => (<button key={tab.id} onClick={() => setView(tab.id)} className={`flex-1 py-2 px-3 rounded-md text-sm font-medium ${view === tab.id ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'}`}>{tab.label}</button>))}
             </div>
-
             <div className="bg-slate-800/30 rounded-xl p-4 md:p-6 border border-slate-700">
               {view === 'standings' && <Standings projections={projections} />}
               {view === 'matchups' && <WeeklyView data={data} standings={standings} selectedWeek={selectedWeek} setSelectedWeek={setSelectedWeek} />}
               {view === 'playoffs' && <Playoffs projections={projections} playoffData={data.playoffs} />}
             </div>
-
-            <div className="text-center mt-6 text-xs text-slate-600">
-              Last updated: {new Date().toLocaleDateString()}
-            </div>
+            <div className="text-center mt-6 text-xs text-slate-600">Last updated: {new Date().toLocaleDateString()}</div>
           </div>
         </div>
       );
