@@ -1,0 +1,39 @@
+{
+  "leagueName": "Master's League",
+  "year": 2024,
+  "currentWeek": 5,
+  "teams": [
+    {"id": 1, "name": "Wawa Warriors", "owner": "Josh Tyson", "abbrev": "WAWA"},
+    {"id": 2, "name": "The Holy Geauxst", "owner": "Neilson Arbour", "abbrev": "TNA"},
+    {"id": 3, "name": "Chase the Rainbow", "owner": "Jace Jackson", "abbrev": "JACE"},
+    {"id": 4, "name": "below budget...", "owner": "Buster Bruton", "abbrev": "crap"},
+    {"id": 5, "name": "Baby Back Gibbs", "owner": "Dave Brown", "abbrev": "BBG"},
+    {"id": 6, "name": "Josh Hoover for Hire", "owner": "Kyle Gore", "abbrev": "GORE"},
+    {"id": 7, "name": "The Running Man", "owner": "Jeff Tack", "abbrev": "RUN"},
+    {"id": 8, "name": "No Talent Ass Clowns", "owner": "Sam More", "abbrev": "NTAC"},
+    {"id": 9, "name": "The Tortured Touchdown Department", "owner": "Logan Caldwell", "abbrev": "TTDD"},
+    {"id": 10, "name": "Navin Johnson", "owner": "Watt Reynolds", "abbrev": "WWR"}
+  ],
+  "schedule": {
+    "1": [[1,2],[3,4],[5,6],[7,8],[9,10]],
+    "2": [[1,3],[2,5],[4,7],[6,9],[8,10]],
+    "3": [[1,4],[2,6],[3,8],[5,9],[7,10]],
+    "4": [[1,5],[2,7],[3,9],[4,6],[8,10]],
+    "5": [[1,6],[2,8],[3,10],[4,5],[7,9]],
+    "6": [[1,7],[2,9],[3,5],[4,8],[6,10]],
+    "7": [[1,8],[2,10],[3,6],[4,9],[5,7]],
+    "8": [[1,9],[2,4],[3,7],[5,10],[6,8]],
+    "9": [[1,10],[2,3],[4,10],[5,8],[6,7]],
+    "10": [[1,2],[3,4],[5,6],[7,8],[9,10]],
+    "11": [[1,3],[2,5],[4,7],[6,9],[8,10]],
+    "12": [[1,4],[2,6],[3,8],[5,9],[7,10]],
+    "13": [[1,5],[2,7],[3,9],[4,6],[8,10]]
+  },
+  "weeks": [
+    {
+      "week": 1,
+      "scores": {"1": 142.5, "2": 128.3, "3": 156.2, "4": 134.8, "5": 119.4, "6": 145.1, "7": 138.7, "8": 112.3, "9": 149.9, "10": 125.6},
+      "espnMatchups": [[1,6],[2,7],[3,8],[4,9],[5,10]]
+    }
+  ]
+}
