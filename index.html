@@ -279,31 +279,70 @@
                     <PlayoffMatchup title={`(6) vs (${cons.week15.match2.team2Seed})`} team1Seed={6} team2Seed={cons.week15.match2.team2Seed} week1Score={cons.week15.match2.score} week2Score={{}} winner={cons.week15.match2.winner} seeds={seeds} isTwoWeek={false} />
                   </div>
                 ) : (
-                  <><div className="text-slate-300 text-sm">(5) vs lowest seed winner • (6) vs highest seed winner</div><div className="text-slate-500 text-xs mt-1">Losers begin Toilet Bowl (2-week matchup)</div></>
+                  <><div className="text-slate-300 text-sm">(5) vs lowest seed winner • (6) vs highest seed winner</div><div className="text-slate-500 text-xs mt-1">Week 14 losers go to Toilet Bowl (Weeks 15-16)</div></>
                 )}
               </div>
               <div className="grid md:grid-cols-2 gap-4">
+                {/* Consolation Final */}
                 {hasPlayoffData && cons && cons.final.team1Seed && cons.final.team2Seed ? (
-                  <PlayoffMatchup title="🏅 Consolation Final" team1Seed={cons.final.team1Seed} team2Seed={cons.final.team2Seed} week1Score={cons.final.week16Score} week2Score={cons.final.week17Score} winner={cons.final.winner} seeds={seeds} isTwoWeek={true} weekLabel="Weeks 16-17" />
+                  <div>
+                    <PlayoffMatchup title="🏅 Consolation Final" team1Seed={cons.final.team1Seed} team2Seed={cons.final.team2Seed} week1Score={cons.final.week16Score} week2Score={cons.final.week17Score} winner={cons.final.winner} seeds={seeds} isTwoWeek={true} weekLabel="Weeks 16-17" />
+                    {cons.final.winner && (
+                      <div className="mt-2 text-center"><div className="inline-block bg-yellow-500/30 rounded-lg px-4 py-2"><div className="text-yellow-400 text-sm font-bold">🏅 CONSOLATION WINNER 🏅</div><div className="text-white text-lg mt-1">{seeds[cons.final.winner]?.name}</div></div></div>
+                    )}
+                  </div>
                 ) : (
                   <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-600"><div className="text-xs text-slate-400">Consolation Final (Wk 16-17)</div><div className="text-white text-sm">Week 15 winners</div></div>
                 )}
+                
+                {/* Toilet Bowl - Fixed to use weeks 15-16 */}
                 {hasPlayoffData && cons && cons.toiletBowl.team1Seed && cons.toiletBowl.team2Seed ? (
-                  <div className="bg-slate-900/50 rounded-lg p-3 border border-red-500/30">
-                    <div className="text-xs text-red-400 mb-2">💀 Toilet Bowl (Weeks 16-17)</div>
-                    <div className="text-slate-400 text-xs mb-2">Loser "wins"</div>
-                    <div className={`flex justify-between py-1 ${cons.toiletBowl.loser === cons.toiletBowl.team1Seed ? 'text-red-400' : 'text-white'}`}>
-                      <span>({cons.toiletBowl.team1Seed}) {seeds[cons.toiletBowl.team1Seed]?.abbrev}</span>
-                      <span>{((cons.toiletBowl.week16Score?.[String(cons.toiletBowl.team1Seed)] || 0) + (cons.toiletBowl.week17Score?.[String(cons.toiletBowl.team1Seed)] || 0)).toFixed(1) || ''}</span>
+                  <div>
+                    <div className="bg-slate-900/50 rounded-lg p-3 border border-red-500/30">
+                      <div className="text-xs text-red-400 mb-2">💀 Toilet Bowl (Weeks 15-16)</div>
+                      <div className="text-slate-400 text-xs mb-2">Loser "wins" 🚽</div>
+                      {(() => {
+                        const tb1 = cons.toiletBowl.team1Seed;
+                        const tb2 = cons.toiletBowl.team2Seed;
+                        const w15 = cons.toiletBowl.week15Score || {};
+                        const w16 = cons.toiletBowl.week16Score || {};
+                        const t1w15 = w15[String(tb1)];
+                        const t1w16 = w16[String(tb1)];
+                        const t2w15 = w15[String(tb2)];
+                        const t2w16 = w16[String(tb2)];
+                        const t1Total = (t1w15 || 0) + (t1w16 || 0);
+                        const t2Total = (t2w15 || 0) + (t2w16 || 0);
+                        const hasW15 = t1w15 !== null && t1w15 !== undefined;
+                        const hasW16 = t1w16 !== null && t1w16 !== undefined;
+                        
+                        return (
+                          <>
+                            <div className={`flex justify-between py-1 ${cons.toiletBowl.loser === tb1 ? 'text-red-400' : 'text-white'}`}>
+                              <span>({tb1}) {seeds[tb1]?.abbrev}</span>
+                              <div className="flex gap-2">
+                                {hasW15 && <span className="text-slate-400">{t1w15?.toFixed(1)}{hasW16 && ` + ${t1w16?.toFixed(1)}`}</span>}
+                                {hasW16 && <span className="font-bold">= {t1Total.toFixed(1)}</span>}
+                                {hasW15 && !hasW16 && <span className="font-bold">{t1w15?.toFixed(1)}</span>}
+                              </div>
+                            </div>
+                            <div className={`flex justify-between py-1 ${cons.toiletBowl.loser === tb2 ? 'text-red-400' : 'text-white'}`}>
+                              <span>({tb2}) {seeds[tb2]?.abbrev}</span>
+                              <div className="flex gap-2">
+                                {hasW15 && <span className="text-slate-400">{t2w15?.toFixed(1)}{hasW16 && ` + ${t2w16?.toFixed(1)}`}</span>}
+                                {hasW16 && <span className="font-bold">= {t2Total.toFixed(1)}</span>}
+                                {hasW15 && !hasW16 && <span className="font-bold">{t2w15?.toFixed(1)}</span>}
+                              </div>
+                            </div>
+                          </>
+                        );
+                      })()}
                     </div>
-                    <div className={`flex justify-between py-1 ${cons.toiletBowl.loser === cons.toiletBowl.team2Seed ? 'text-red-400' : 'text-white'}`}>
-                      <span>({cons.toiletBowl.team2Seed}) {seeds[cons.toiletBowl.team2Seed]?.abbrev}</span>
-                      <span>{((cons.toiletBowl.week16Score?.[String(cons.toiletBowl.team2Seed)] || 0) + (cons.toiletBowl.week17Score?.[String(cons.toiletBowl.team2Seed)] || 0)).toFixed(1) || ''}</span>
-                    </div>
-                    {cons.toiletBowl.loser && <div className="text-xs text-red-400 mt-2 text-center">💀 Winner: ({cons.toiletBowl.loser}) {seeds[cons.toiletBowl.loser]?.name}</div>}
+                    {cons.toiletBowl.loser && (
+                      <div className="mt-2 text-center"><div className="inline-block bg-red-500/30 rounded-lg px-4 py-2"><div className="text-red-400 text-sm font-bold">💀 TOILET BOWL WINNER 💀</div><div className="text-white text-lg mt-1">{seeds[cons.toiletBowl.loser]?.name}</div></div></div>
+                    )}
                   </div>
                 ) : (
-                  <div className="bg-slate-900/50 rounded-lg p-3 border border-red-500/30"><div className="text-xs text-red-400">💀 Toilet Bowl (Wk 16-17)</div><div className="text-slate-300 text-sm">Loser "wins"</div></div>
+                  <div className="bg-slate-900/50 rounded-lg p-3 border border-red-500/30"><div className="text-xs text-red-400">💀 Toilet Bowl (Wk 15-16)</div><div className="text-slate-300 text-sm">Week 14 losers • Loser "wins" 🚽</div></div>
                 )}
               </div>
             </div>
