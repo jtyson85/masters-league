@@ -64,7 +64,17 @@
       return Object.values(standings).sort((a, b) => b.totalVP - a.totalVP || b.totalPts - a.totalPts);
     }
 
-    function Standings({ projections }) {
+    function Standings({ projections, hasData }) {
+      if (!hasData || projections.length === 0) {
+        return (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">🏈</div>
+            <h3 className="text-xl font-semibold text-white mb-2">2026 Season Coming Soon</h3>
+            <p className="text-slate-400">Standings will appear once Week 1 games are played</p>
+          </div>
+        );
+      }
+      
       return (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -107,7 +117,7 @@
 
     function KeeperTracker({ teams }) {
       const [keepers, setKeepers] = useState({});
-      const [settings, setSettings] = useState({ maxKeepers: 2, deadline: '2026-08-15' });
+      const [settings, setSettings] = useState({ maxKeepers: 3, deadline: '2026-08-15' });
       const [isCommish, setIsCommish] = useState(false);
       const [password, setPassword] = useState('');
       const [editTeam, setEditTeam] = useState(null);
@@ -333,6 +343,38 @@
     }
 
     function WeeklyView({ data, selectedWeek, setSelectedWeek }) {
+      // If no weeks played yet, show schedule preview
+      if (!data.weeks || data.weeks.length === 0) {
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white mb-4">📅 2026 Schedule Preview</h3>
+            <div className="grid gap-3">
+              {Object.entries(data.schedule).slice(0, 13).map(([week, matchups]) => (
+                <div key={week} className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
+                  <div className="text-sm font-medium text-blue-400 mb-2">Week {week}</div>
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
+                    {matchups.map(([h, a], i) => {
+                      const home = data.teams.find(t => t.id === h);
+                      const away = data.teams.find(t => t.id === a);
+                      return (
+                        <div key={i} className="bg-slate-900/50 rounded px-2 py-1 text-xs text-center">
+                          <span className="text-white">{home?.abbrev}</span>
+                          <span className="text-slate-500 mx-1">v</span>
+                          <span className="text-white">{away?.abbrev}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="text-center text-slate-500 text-sm mt-6">
+              This is your second H2H matchup schedule. ESPN matchups will be added when the season starts.
+            </div>
+          </div>
+        );
+      }
+
       const weeks = data.weeks.map(w => w.week);
       const weekData = data.weeks.find(w => w.week === selectedWeek);
       if (!weekData) return <div className="text-slate-400 text-center py-8">No data for Week {selectedWeek}</div>;
@@ -465,7 +507,7 @@
             </div>
 
             <div className="bg-slate-800/30 rounded-xl p-4 md:p-6 border border-slate-700">
-              {view === 'standings' && <Standings projections={projections} />}
+              {view === 'standings' && <Standings projections={projections} hasData={data.weeks && data.weeks.length > 0} />}
               {view === 'matchups' && <WeeklyView data={data} selectedWeek={selectedWeek} setSelectedWeek={setSelectedWeek} />}
               {view === 'keepers' && <KeeperTracker teams={data.teams} />}
             </div>
