@@ -8,14 +8,12 @@
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
   <style>body { background: #0f172a; }</style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
-    const { Trophy, Calendar, Users, TrendingUp, Shield, Repeat, Star, Lock, Save, Mail, Plus, X, Check } = lucide;
 
     const CONFIG = { 
       regularSeasonWeeks: 13,
@@ -36,11 +34,6 @@
           return true;
         } catch { return false; }
       }
-    };
-
-    const Icon = ({ icon, className }) => {
-      const IconComponent = icon;
-      return <IconComponent className={className} />;
     };
 
     function calculateStandings(teams, weeklyData, schedule) {
@@ -74,6 +67,47 @@
       });
       Object.values(standings).forEach(t => { t.totalVP = t.h2hVP + t.ptsVP; });
       return Object.values(standings).sort((a, b) => b.totalVP - a.totalVP || b.totalPts - a.totalPts);
+    }
+
+    function Standings({ projections }) {
+      return (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead><tr className="border-b border-slate-700 text-slate-400">
+              <th className="text-left py-3 px-2">Seed</th><th className="text-left py-3 px-2">Team</th>
+              <th className="text-center py-3 px-2">VP</th><th className="text-center py-3 px-2 hidden sm:table-cell">H2H</th>
+              <th className="text-center py-3 px-2 hidden sm:table-cell">Pts</th>
+              <th className="text-center py-3 px-2 hidden md:table-cell">Record</th>
+              <th className="text-right py-3 px-2">Total Pts</th>
+            </tr></thead>
+            <tbody>
+              {projections.map((team, i) => (
+                <tr key={team.id} className={`border-b border-slate-800 ${i < 4 ? 'bg-emerald-500/5' : i < 6 ? 'bg-yellow-500/5' : ''}`}>
+                  <td className="py-3 px-2">
+                    <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${i < 4 ? 'bg-emerald-500/20 text-emerald-400' : i < 6 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-700 text-slate-400'}`}>{i + 1}</span>
+                  </td>
+                  <td className="py-3 px-2">
+                    <div className="font-medium text-white">{team.name}</div>
+                    <div className="text-xs text-slate-500">{team.owner}</div>
+                  </td>
+                  <td className="text-center py-3 px-2"><span className="text-lg font-bold text-white">{team.totalVP}</span></td>
+                  <td className="text-center py-3 px-2 text-slate-300 hidden sm:table-cell">{team.h2hVP}</td>
+                  <td className="text-center py-3 px-2 text-slate-300 hidden sm:table-cell">{team.ptsVP}</td>
+                  <td className="text-center py-3 px-2 text-slate-300 hidden md:table-cell">{team.wins}-{team.losses}{team.ties > 0 && `-${team.ties}`}</td>
+                  <td className="text-right py-3 px-2 text-slate-300">{team.totalPts.toFixed(1)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="mt-6 p-4 bg-slate-800/50 rounded-lg border border-slate-700">
+            <h4 className="text-sm font-medium text-slate-300 mb-2">Victory Points Scoring</h4>
+            <div className="grid grid-cols-2 gap-4 text-xs text-slate-400">
+              <div><div className="font-medium text-slate-300 mb-1">H2H (2 matchups/week)</div><div>Win: 2 VP • Tie: 1 VP</div></div>
+              <div><div className="font-medium text-slate-300 mb-1">Weekly Points</div><div>1st-3rd: 2 VP • 4th-6th: 1 VP</div></div>
+            </div>
+          </div>
+        </div>
+      );
     }
 
     function TradeCenter({ teams }) {
@@ -119,24 +153,19 @@ To: ${trade.to.name} (${trade.to.owner})
 ${trade.from.name} gives: ${trade.offered}
 ${trade.to.name} gives: ${trade.requested}
 
-Message: ${message || 'None'}
-
-Please approve or reject this trade.`;
+Message: ${message || 'None'}`;
 
         window.location.href = `mailto:${CONFIG.commissionerEmail}?subject=Trade Proposal&body=${encodeURIComponent(emailBody)}`;
 
         setOfferedPlayers('');
         setRequestedPlayers('');
         setMessage('');
-        alert('Trade proposal sent!');
       };
 
       return (
         <div className="space-y-6">
           <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Icon icon={Repeat} className="w-5 h-5" /> Propose Trade
-            </h3>
+            <h3 className="text-lg font-semibold text-white mb-4">🔄 Propose Trade</h3>
             
             <div className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
@@ -169,19 +198,19 @@ Please approve or reject this trade.`;
                 <label className="block text-sm text-slate-400 mb-2">You Receive</label>
                 <textarea value={requestedPlayers} onChange={(e) => setRequestedPlayers(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white"
-                  rows="3" placeholder="e.g., Josh Allen, Stefon Diggs"/>
+                  rows="3" placeholder="e.g., Josh Allen"/>
               </div>
 
               <div>
                 <label className="block text-sm text-slate-400 mb-2">Message (Optional)</label>
                 <textarea value={message} onChange={(e) => setMessage(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white"
-                  rows="2" placeholder="Add a message..."/>
+                  rows="2" placeholder="Optional message..."/>
               </div>
 
               <button onClick={handleSubmit}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg flex items-center justify-center gap-2">
-                <Icon icon={Mail} className="w-4 h-4" /> Submit Trade Proposal
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">
+                📧 Submit Trade Proposal
               </button>
             </div>
           </div>
@@ -244,7 +273,7 @@ Please approve or reject this trade.`;
         return (
           <div className="space-y-6">
             <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-              <h3 className="text-lg font-semibold text-white mb-4">Keeper Settings</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">⚙️ Keeper Settings</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-slate-400 mb-2">Max Keepers Per Team</label>
@@ -259,8 +288,8 @@ Please approve or reject this trade.`;
                     className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white"/>
                 </div>
               </div>
-              <button onClick={saveSettings} className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2">
-                <Icon icon={Save} className="w-4 h-4" /> Save Settings
+              <button onClick={saveSettings} className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                💾 Save Settings
               </button>
             </div>
 
@@ -274,16 +303,16 @@ Please approve or reject this trade.`;
                     </div>
                     <button onClick={() => setEditingTeam(editingTeam === team.id ? null : team.id)}
                       className="text-blue-400 hover:text-blue-300 text-sm">
-                      {editingTeam === team.id ? 'Close' : 'Edit'}
+                      {editingTeam === team.id ? '✖ Close' : '✏️ Edit'}
                     </button>
                   </div>
 
                   {keepers[team.id]?.map((keeper, idx) => (
                     <div key={idx} className="flex items-center justify-between py-2 border-t border-slate-700">
-                      <div className="text-white">{keeper.player} <span className="text-slate-400 text-sm">(Rd {keeper.round})</span></div>
+                      <div className="text-white">⭐ {keeper.player} <span className="text-slate-400 text-sm">(Rd {keeper.round})</span></div>
                       {editingTeam === team.id && (
                         <button onClick={() => removeKeeper(team.id, idx)} className="text-red-400 hover:text-red-300">
-                          <Icon icon={X} className="w-4 h-4" />
+                          ✖
                         </button>
                       )}
                     </div>
@@ -294,11 +323,11 @@ Please approve or reject this trade.`;
                       <input type="text" placeholder="Player name" value={newKeeper.player}
                         onChange={(e) => setNewKeeper({...newKeeper, player: e.target.value})}
                         className="flex-1 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm"/>
-                      <input type="number" placeholder="Round" value={newKeeper.round}
+                      <input type="number" placeholder="Rd" value={newKeeper.round}
                         onChange={(e) => setNewKeeper({...newKeeper, round: e.target.value})}
                         className="w-20 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm"/>
                       <button onClick={() => addKeeper(team.id)} className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded">
-                        <Icon icon={Plus} className="w-4 h-4" />
+                        ➕
                       </button>
                     </div>
                   )}
@@ -310,8 +339,8 @@ Please approve or reject this trade.`;
               ))}
             </div>
 
-            <button onClick={saveKeepers} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg flex items-center justify-center gap-2">
-              <Icon icon={Save} className="w-5 h-5" /> Save All Keepers
+            <button onClick={saveKeepers} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg">
+              💾 Save All Keepers
             </button>
           </div>
         );
@@ -320,7 +349,7 @@ Please approve or reject this trade.`;
       return (
         <div className="space-y-6">
           <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-            <h3 className="text-lg font-semibold text-white mb-2">Keeper Rules</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">📋 Keeper Rules</h3>
             <div className="text-slate-300 space-y-1">
               <div>• Max keepers: <strong>{keeperSettings.maxKeepers}</strong></div>
               <div>• Penalty: <strong>{keeperSettings.penaltyRounds} round(s) earlier</strong></div>
@@ -334,7 +363,7 @@ Please approve or reject this trade.`;
                 {keepers[team.id] && keepers[team.id].length > 0 ? (
                   keepers[team.id].map((keeper, idx) => (
                     <div key={idx} className="flex items-center gap-2 py-1">
-                      <Icon icon={Star} className="w-4 h-4 text-yellow-500" />
+                      <span>⭐</span>
                       <span className="text-white">{keeper.player}</span>
                       <span className="text-slate-400 text-sm">(Rd {keeper.round})</span>
                     </div>
@@ -409,9 +438,7 @@ Please approve or reject this trade.`;
         return (
           <div className="max-w-md mx-auto mt-20">
             <div className="bg-slate-800/50 rounded-lg p-8 border border-slate-700">
-              <div className="flex items-center justify-center mb-6">
-                <Icon icon={Lock} className="w-12 h-12 text-slate-400" />
-              </div>
+              <div className="text-6xl text-center mb-6">🔒</div>
               <h3 className="text-xl font-semibold text-white text-center mb-4">Commissioner Access</h3>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleAuth()}
@@ -429,34 +456,36 @@ Please approve or reject this trade.`;
       return (
         <div className="space-y-6">
           <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-            <h3 className="text-lg font-semibold text-white mb-4">Schedule Generator</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">📅 Schedule Generator</h3>
             <button onClick={generateSchedule}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2">
-              <Icon icon={Calendar} className="w-4 h-4" /> Generate Round-Robin
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+              Generate Round-Robin
             </button>
             
             {generatedSchedule && (
-              <div className="mt-4 bg-slate-900/50 rounded p-4 max-h-96 overflow-y-auto">
-                <pre className="text-xs text-slate-300">{JSON.stringify(generatedSchedule, null, 2)}</pre>
+              <div className="mt-4">
+                <div className="bg-slate-900/50 rounded p-4 max-h-96 overflow-y-auto">
+                  <pre className="text-xs text-slate-300">{JSON.stringify(generatedSchedule, null, 2)}</pre>
+                </div>
                 <button onClick={() => navigator.clipboard.writeText(JSON.stringify(generatedSchedule))}
-                  className="mt-2 text-blue-400 text-sm">Copy to clipboard</button>
+                  className="mt-2 text-blue-400 text-sm hover:text-blue-300">
+                  📋 Copy to clipboard
+                </button>
               </div>
             )}
           </div>
 
           <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-            <h3 className="text-lg font-semibold text-white mb-4">Trade Approvals</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">✅ Trade Approvals</h3>
             {pendingTrades.filter(t => t.status === 'pending').length === 0 ? (
               <div className="text-slate-400">No pending trades</div>
             ) : (
               <div className="space-y-4">
                 {pendingTrades.filter(t => t.status === 'pending').map(trade => (
                   <div key={trade.id} className="bg-slate-900/50 rounded p-4">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <div className="text-white font-medium">{trade.from.name} ↔ {trade.to.name}</div>
-                        <div className="text-xs text-slate-500">{new Date(trade.date).toLocaleDateString()}</div>
-                      </div>
+                    <div className="mb-3">
+                      <div className="text-white font-medium">{trade.from.name} ↔ {trade.to.name}</div>
+                      <div className="text-xs text-slate-500">{new Date(trade.date).toLocaleDateString()}</div>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4 mb-3">
                       <div>
@@ -469,16 +498,16 @@ Please approve or reject this trade.`;
                       </div>
                     </div>
                     {trade.message && (
-                      <div className="text-sm text-slate-400 mb-3">Message: {trade.message}</div>
+                      <div className="text-sm text-slate-400 mb-3">💬 {trade.message}</div>
                     )}
                     <div className="flex gap-2">
                       <button onClick={() => approveTrade(trade.id)}
-                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded flex items-center justify-center gap-2">
-                        <Icon icon={Check} className="w-4 h-4" /> Approve
+                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded">
+                        ✅ Approve
                       </button>
                       <button onClick={() => rejectTrade(trade.id)}
-                        className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded flex items-center justify-center gap-2">
-                        <Icon icon={X} className="w-4 h-4" /> Reject
+                        className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded">
+                        ❌ Reject
                       </button>
                     </div>
                   </div>
@@ -486,40 +515,25 @@ Please approve or reject this trade.`;
               </div>
             )}
           </div>
-        </div>
-      );
-    }
 
-    function Standings({ projections }) {
-      return (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead><tr className="border-b border-slate-700 text-slate-400">
-              <th className="text-left py-3 px-2">Seed</th><th className="text-left py-3 px-2">Team</th>
-              <th className="text-center py-3 px-2">VP</th><th className="text-center py-3 px-2 hidden sm:table-cell">H2H</th>
-              <th className="text-center py-3 px-2 hidden sm:table-cell">Pts</th>
-              <th className="text-center py-3 px-2 hidden md:table-cell">Record</th>
-              <th className="text-right py-3 px-2">Total Pts</th>
-            </tr></thead>
-            <tbody>
-              {projections.map((team, i) => (
-                <tr key={team.id} className={`border-b border-slate-800 ${i < 4 ? 'bg-emerald-500/5' : i < 6 ? 'bg-yellow-500/5' : ''}`}>
-                  <td className="py-3 px-2">
-                    <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${i < 4 ? 'bg-emerald-500/20 text-emerald-400' : i < 6 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-700 text-slate-400'}`}>{i + 1}</span>
-                  </td>
-                  <td className="py-3 px-2">
-                    <div className="font-medium text-white">{team.name}</div>
-                    <div className="text-xs text-slate-500">{team.owner}</div>
-                  </td>
-                  <td className="text-center py-3 px-2"><span className="text-lg font-bold text-white">{team.totalVP}</span></td>
-                  <td className="text-center py-3 px-2 text-slate-300 hidden sm:table-cell">{team.h2hVP}</td>
-                  <td className="text-center py-3 px-2 text-slate-300 hidden sm:table-cell">{team.ptsVP}</td>
-                  <td className="text-center py-3 px-2 text-slate-300 hidden md:table-cell">{team.wins}-{team.losses}{team.ties > 0 && `-${team.ties}`}</td>
-                  <td className="text-right py-3 px-2 text-slate-300">{team.totalPts.toFixed(1)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {pendingTrades.filter(t => t.status !== 'pending').length > 0 && (
+            <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
+              <h3 className="text-lg font-semibold text-white mb-4">📜 Trade History</h3>
+              <div className="space-y-2">
+                {pendingTrades.filter(t => t.status !== 'pending').map(trade => (
+                  <div key={trade.id} className="bg-slate-900/50 rounded p-3 flex items-center justify-between">
+                    <div>
+                      <div className="text-white text-sm">{trade.from.name} ↔ {trade.to.name}</div>
+                      <div className="text-xs text-slate-500">{new Date(trade.date).toLocaleDateString()}</div>
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded ${trade.status === 'approved' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                      {trade.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       );
     }
@@ -533,7 +547,7 @@ Please approve or reject this trade.`;
         fetch('data.json')
           .then(res => res.json())
           .then(d => { setData(d); setLoading(false); })
-          .catch(() => setLoading(false));
+          .catch(err => { console.error('Load error:', err); setLoading(false); });
       }, []);
 
       const standings = useMemo(() => {
@@ -548,19 +562,18 @@ Please approve or reject this trade.`;
         return standings.map((team, idx) => ({
           ...team,
           maxPossible: team.totalVP + (weeksLeft * 6),
-          status: idx < 4 ? "Playoff" : idx < 6 ? "Bubble" : "Outside",
           seed: idx + 1
         }));
       }, [standings, data]);
 
-      if (loading) return <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">Loading...</div>;
-      if (!data) return <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">Failed to load</div>;
+      if (loading) return <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center text-xl">Loading...</div>;
+      if (!data) return <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center text-xl">Failed to load data.json</div>;
 
       const tabs = [
-        { id: 'standings', label: 'Standings', icon: Users },
-        { id: 'trades', label: 'Trades', icon: Repeat },
-        { id: 'keepers', label: 'Keepers', icon: Star },
-        { id: 'commissioner', label: 'Commissioner', icon: Shield }
+        { id: 'standings', label: 'Standings', emoji: '📊' },
+        { id: 'trades', label: 'Trades', emoji: '🔄' },
+        { id: 'keepers', label: 'Keepers', emoji: '⭐' },
+        { id: 'commissioner', label: 'Commissioner', emoji: '🛡️' }
       ];
 
       return (
@@ -577,7 +590,7 @@ Please approve or reject this trade.`;
               {tabs.map(tab => (
                 <button key={tab.id} onClick={() => setView(tab.id)}
                   className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap ${view === tab.id ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'}`}>
-                  <Icon icon={tab.icon} className="w-4 h-4" />
+                  <span>{tab.emoji}</span>
                   <span className="hidden sm:inline">{tab.label}</span>
                 </button>
               ))}
