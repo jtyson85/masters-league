@@ -118,25 +118,37 @@
     function KeeperTracker({ teams }) {
       const [keepers, setKeepers] = useState({});
       const [settings, setSettings] = useState({ maxKeepers: 3, deadline: '2026-08-15' });
+      const [budgets, setBudgets] = useState({});
       const [isCommish, setIsCommish] = useState(false);
       const [password, setPassword] = useState('');
       const [editTeam, setEditTeam] = useState(null);
-      const [newKeeper, setNewKeeper] = useState({ player: '', draftRound: '', keeperRound: '' });
+      const [newKeeper, setNewKeeper] = useState({ player: '', cost: '' });
 
       useEffect(() => {
         storage.get('keepers-2026').then(k => { if (k) setKeepers(k); });
         storage.get('keeper-settings-2026').then(s => { if (s) setSettings(s); });
-      }, []);
+        storage.get('team-budgets-2026').then(b => { 
+          if (b) {
+            setBudgets(b);
+          } else {
+            // Initialize all teams with $200
+            const initial = {};
+            teams.forEach(t => { initial[t.id] = 200; });
+            setBudgets(initial);
+          }
+        });
+      }, [teams]);
 
       const saveAll = async () => {
         await storage.set('keepers-2026', keepers);
         await storage.set('keeper-settings-2026', settings);
+        await storage.set('team-budgets-2026', budgets);
         alert('Saved!');
       };
 
       const addKeeper = (teamId) => {
-        if (!newKeeper.player || !newKeeper.draftRound || !newKeeper.keeperRound) {
-          alert('Fill in all fields');
+        if (!newKeeper.player || !newKeeper.cost) {
+          alert('Enter player name and cost');
           return;
         }
         const updated = { ...keepers };
@@ -145,15 +157,21 @@
           alert(`Max ${settings.maxKeepers} keepers per team`);
           return;
         }
-        updated[teamId].push({ ...newKeeper });
+        updated[teamId].push({ player: newKeeper.player, cost: parseInt(newKeeper.cost) });
         setKeepers(updated);
-        setNewKeeper({ player: '', draftRound: '', keeperRound: '' });
+        setNewKeeper({ player: '', cost: '' });
       };
 
       const removeKeeper = (teamId, idx) => {
         const updated = { ...keepers };
         updated[teamId].splice(idx, 1);
         setKeepers(updated);
+      };
+
+      const updateBudget = (teamId, newBudget) => {
+        const updated = { ...budgets };
+        updated[teamId] = parseInt(newBudget);
+        setBudgets(updated);
       };
 
       const handleAuth = () => {
@@ -164,15 +182,23 @@
         }
       };
 
+      const getSpentAndRemaining = (teamId) => {
+        const teamKeepers = keepers[teamId] || [];
+        const spent = teamKeepers.reduce((sum, k) => sum + k.cost, 0);
+        const budget = budgets[teamId] || 200;
+        const remaining = budget - spent;
+        return { spent, remaining, budget };
+      };
+
       return (
         <div className="space-y-6">
-          {/* Settings (Commissioner only) */}
+          {/* Commissioner Login */}
           {!isCommish && (
             <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-white font-medium">Commissioner Controls</h4>
-                  <div className="text-sm text-slate-400">Manage settings and edit all keepers</div>
+                  <div className="text-sm text-slate-400">Manage keepers and budgets</div>
                 </div>
                 <div className="flex gap-2">
                   <input type="password" placeholder="Password" value={password}
@@ -180,16 +206,17 @@
                     onKeyPress={(e) => e.key === 'Enter' && handleAuth()}
                     className="bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm"/>
                   <button onClick={handleAuth} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm">
-                    Unlock
+                    🔓 Unlock
                   </button>
                 </div>
               </div>
             </div>
           )}
 
+          {/* Settings */}
           {isCommish && (
             <div className="bg-slate-800/50 rounded-lg p-6 border border-emerald-500/30">
-              <h3 className="text-lg font-semibold text-white mb-4">⚙️ Commissioner Settings</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">⚙️ Keeper Settings</h3>
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-sm text-slate-400 mb-2">Max Keepers Per Team</label>
@@ -210,24 +237,25 @@
             </div>
           )}
 
-          {/* League-wide Keeper Rules */}
+          {/* Rules */}
           <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-            <h3 className="text-lg font-semibold text-white mb-3">📋 2026 Keeper Rules</h3>
+            <h3 className="text-lg font-semibold text-white mb-3">📋 2026 Keeper Rules (Auction)</h3>
             <div className="text-slate-300 space-y-2">
               <div>• Maximum keepers per team: <strong>{settings.maxKeepers}</strong></div>
               <div>• Keeper deadline: <strong>{new Date(settings.deadline).toLocaleDateString()}</strong></div>
-              <div>• Keeper cost: <strong>Drafted round - 1</strong> (e.g., 5th round pick → kept in 4th round)</div>
+              <div>• Keeper cost: <strong>2025 price + $5</strong></div>
+              <div>• Base auction budget: <strong>$200</strong> (adjustable per team)</div>
               <div className="text-sm text-slate-400 mt-3">
-                Players drafted in Round 1 cannot be kept (would require Round 0)
+                Example: Player drafted for $15 in 2025 → costs $20 to keep in 2026
               </div>
             </div>
           </div>
 
-          {/* Team Keeper Lists */}
+          {/* Team Lists */}
           <div className="space-y-4">
             {teams.map(team => {
               const teamKeepers = keepers[team.id] || [];
-              const canEdit = isCommish;
+              const { spent, remaining, budget } = getSpentAndRemaining(team.id);
               
               return (
                 <div key={team.id} className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
@@ -237,36 +265,48 @@
                       <div className="text-sm text-slate-400">{team.owner}</div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-xs text-slate-500">
-                        {teamKeepers.length} / {settings.maxKeepers} keepers
-                      </span>
-                      {canEdit && (
+                      <div className="text-right">
+                        <div className="text-xs text-slate-500">Budget</div>
+                        <div className={`text-sm font-medium ${remaining < 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                          ${remaining}
+                        </div>
+                      </div>
+                      {isCommish && (
                         <button onClick={() => setEditTeam(editTeam === team.id ? null : team.id)}
                           className="text-blue-400 hover:text-blue-300 text-sm">
-                          {editTeam === team.id ? '✖ Close' : '✏️ Edit'}
+                          {editTeam === team.id ? '✖' : '✏️'}
                         </button>
                       )}
                     </div>
                   </div>
 
-                  {/* Display keepers */}
+                  {/* Budget adjustment (commissioner only) */}
+                  {isCommish && editTeam === team.id && (
+                    <div className="mb-3 p-3 bg-slate-900/50 rounded">
+                      <label className="block text-sm text-slate-400 mb-2">Adjust Budget</label>
+                      <input type="number" value={budgets[team.id] || 200}
+                        onChange={(e) => updateBudget(team.id, e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white"/>
+                      <div className="text-xs text-slate-500 mt-1">
+                        Current: ${budget} | Spent: ${spent} | Remaining: ${remaining}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Keepers */}
                   {teamKeepers.length > 0 ? (
                     <div className="space-y-2">
                       {teamKeepers.map((keeper, idx) => (
                         <div key={idx} className="flex items-center justify-between py-2 px-3 bg-slate-900/50 rounded">
                           <div className="flex items-center gap-3">
                             <span className="text-yellow-500">⭐</span>
-                            <div>
-                              <div className="text-white font-medium">{keeper.player}</div>
-                              <div className="text-xs text-slate-400">
-                                Drafted: Rd {keeper.draftRound} → Kept in: Rd {keeper.keeperRound}
-                              </div>
-                            </div>
+                            <div className="text-white font-medium">{keeper.player}</div>
+                            <div className="text-emerald-400 font-bold">${keeper.cost}</div>
                           </div>
                           {editTeam === team.id && (
                             <button onClick={() => removeKeeper(team.id, idx)}
                               className="text-red-400 hover:text-red-300 text-sm">
-                              ✖ Remove
+                              ✖
                             </button>
                           )}
                         </div>
@@ -276,32 +316,25 @@
                     <div className="text-slate-500 text-sm text-center py-4">No keepers selected</div>
                   )}
 
-                  {/* Add keeper form (commissioner only) */}
+                  {/* Add keeper (commissioner only) */}
                   {editTeam === team.id && (
                     <div className="mt-4 p-3 bg-slate-900/50 rounded border border-slate-600">
                       <div className="text-sm text-slate-400 mb-3">Add Keeper</div>
-                      <div className="grid grid-cols-12 gap-2">
+                      <div className="flex gap-2">
                         <input type="text" placeholder="Player name" value={newKeeper.player}
                           onChange={(e) => setNewKeeper({...newKeeper, player: e.target.value})}
-                          className="col-span-6 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm"
+                          className="flex-1 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm"
                           onKeyPress={(e) => e.key === 'Enter' && addKeeper(team.id)}/>
-                        <input type="number" placeholder="Draft Rd" value={newKeeper.draftRound}
-                          onChange={(e) => {
-                            const draft = e.target.value;
-                            const keeper = draft > 1 ? parseInt(draft) - 1 : '';
-                            setNewKeeper({...newKeeper, draftRound: draft, keeperRound: keeper});
-                          }}
-                          className="col-span-2 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm"/>
-                        <input type="number" placeholder="Keep Rd" value={newKeeper.keeperRound}
-                          onChange={(e) => setNewKeeper({...newKeeper, keeperRound: e.target.value})}
-                          className="col-span-2 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm"/>
+                        <input type="number" placeholder="$$" value={newKeeper.cost}
+                          onChange={(e) => setNewKeeper({...newKeeper, cost: e.target.value})}
+                          className="w-24 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white text-sm"/>
                         <button onClick={() => addKeeper(team.id)}
-                          className="col-span-2 bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded text-sm">
-                          ➕ Add
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-sm">
+                          ➕
                         </button>
                       </div>
                       <div className="text-xs text-slate-500 mt-2">
-                        Keeper round auto-calculates (Draft round - 1)
+                        Keeper cost = last year's price + $5
                       </div>
                     </div>
                   )}
@@ -310,33 +343,33 @@
             })}
           </div>
 
+          {/* Summary */}
+          <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
+            <h3 className="text-lg font-semibold text-white mb-4">💰 Budget Summary</h3>
+            <div className="grid md:grid-cols-2 gap-3">
+              {teams.map(team => {
+                const { spent, remaining, budget } = getSpentAndRemaining(team.id);
+                return (
+                  <div key={team.id} className="flex items-center justify-between py-2 px-3 bg-slate-900/50 rounded">
+                    <div>
+                      <div className="text-white text-sm">{team.abbrev}</div>
+                      <div className="text-xs text-slate-500">${spent} spent</div>
+                    </div>
+                    <div className={`font-bold ${remaining < 0 ? 'text-red-400' : 'text-emerald-400'}`}>
+                      ${remaining}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Save button */}
           {isCommish && (
             <button onClick={saveAll}
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg font-medium">
               💾 Save All Keeper Data
             </button>
-          )}
-
-          {/* Export for Draft */}
-          {isCommish && Object.keys(keepers).length > 0 && (
-            <div className="bg-slate-800/50 rounded-lg p-6 border border-slate-700">
-              <h3 className="text-lg font-semibold text-white mb-3">📤 Export for Draft</h3>
-              <div className="space-y-2">
-                {teams.map(team => {
-                  const teamKeepers = keepers[team.id] || [];
-                  if (teamKeepers.length === 0) return null;
-                  return (
-                    <div key={team.id} className="text-sm">
-                      <span className="text-white font-medium">{team.name}:</span>
-                      <span className="text-slate-300 ml-2">
-                        {teamKeepers.map(k => `${k.player} (Rd ${k.keeperRound})`).join(', ')}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
           )}
         </div>
       );
@@ -347,20 +380,31 @@
       if (!data.weeks || data.weeks.length === 0) {
         return (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white mb-4">📅 2026 Schedule Preview</h3>
+            <div className="bg-blue-500/10 rounded-lg p-4 border border-blue-500/30 mb-4">
+              <h4 className="text-blue-400 font-medium mb-2">ℹ️ About the Schedule</h4>
+              <p className="text-slate-300 text-sm">
+                Each team plays <strong>TWO matchups per week</strong>: one from ESPN's schedule (set by ESPN) 
+                and one from the custom schedule below. Both matchups count toward Victory Points.
+              </p>
+            </div>
+
+            <h3 className="text-lg font-semibold text-white mb-4">📅 Custom Schedule (Matchup #2 Each Week)</h3>
             <div className="grid gap-3">
               {Object.entries(data.schedule).slice(0, 13).map(([week, matchups]) => (
-                <div key={week} className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
-                  <div className="text-sm font-medium text-blue-400 mb-2">Week {week}</div>
-                  <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
+                <div key={week} className="bg-slate-800/50 rounded-lg p-3 border border-purple-500/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-sm font-medium text-purple-400">Week {week}</div>
+                    <div className="text-xs text-slate-500">Second H2H Matchup</div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
                     {matchups.map(([h, a], i) => {
                       const home = data.teams.find(t => t.id === h);
                       const away = data.teams.find(t => t.id === a);
                       return (
-                        <div key={i} className="bg-slate-900/50 rounded px-2 py-1 text-xs text-center">
-                          <span className="text-white">{home?.abbrev}</span>
-                          <span className="text-slate-500 mx-1">v</span>
-                          <span className="text-white">{away?.abbrev}</span>
+                        <div key={i} className="bg-slate-900/50 rounded px-2 py-1.5 text-center">
+                          <div className="text-white text-xs">{home?.abbrev}</div>
+                          <div className="text-slate-500 text-xs">vs</div>
+                          <div className="text-white text-xs">{away?.abbrev}</div>
                         </div>
                       );
                     })}
@@ -368,8 +412,9 @@
                 </div>
               ))}
             </div>
-            <div className="text-center text-slate-500 text-sm mt-6">
-              This is your second H2H matchup schedule. ESPN matchups will be added when the season starts.
+            <div className="text-center text-slate-500 text-sm mt-6 p-4 bg-slate-800/30 rounded">
+              <strong>Note:</strong> ESPN will generate the first matchup each week. 
+              This is your second matchup schedule for double-headers.
             </div>
           </div>
         );
