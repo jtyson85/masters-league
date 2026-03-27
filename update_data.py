@@ -6,6 +6,7 @@ from espn_api.football import League
 import json
 import os
 
+
 # === CONFIGURATION - UPDATE THESE ===
 LEAGUE_ID = 1463914
 YEAR = 2026  # Updated for 2026 season
@@ -14,22 +15,584 @@ SWID = os.environ.get('SWID', '{C030DBC8-E7FF-4728-8BA6-20DBB091D3DF}')        #
 
 REGULAR_SEASON_WEEKS = 13
 
-# 2026 Second H2H Schedule (Generated Schedule)
-# ESPN IDs: Arbour=1, More=2, Gore=3, Bruton=4, Reynolds=5, Brown=6, Tyson=7, Tack=8, Jackson=9, Caldwell=10
-SCHEDULE_H2H2 = {
-  "1": [[1,2], [7,6], [3,10], [4,8], [9,5]],
-  "2": [[1,6], [2,10], [7,8], [3,5], [4,9]],
-  "3": [[1,10], [6,8], [2,5], [7,9], [3,4]],
-  "4": [[1,8], [10,5], [6,9], [2,4], [7,3]],
-  "5": [[1,5], [8,9], [10,4], [6,3], [2,7]],
-  "6": [[1,9], [5,4], [8,3], [10,7], [6,2]],
-  "7": [[1,4], [9,3], [5,7], [8,2], [10,6]],
-  "8": [[1,3], [4,7], [9,2], [5,6], [8,10]],
-  "9": [[1,7], [3,2], [4,6], [9,10], [5,8]],
-  "10": [[1,2], [7,6], [3,10], [4,8], [9,5]],
-  "11": [[1,6], [2,10], [7,8], [3,5], [4,9]],
-  "12": [[1,10], [6,8], [2,5], [7,9], [3,4]],
-  "13": [[1,8], [10,5], [6,9], [2,4], [7,3]]
+# 2026 Matchup Schedules (Both pre-defined - will be generated)
+# Replace these with your generated schedules after running schedule_generator.py
+SCHEDULE_MATCHUP1 = {
+  "1": [
+    [
+      1,
+      10
+    ],
+    [
+      2,
+      9
+    ],
+    [
+      3,
+      8
+    ],
+    [
+      4,
+      7
+    ],
+    [
+      5,
+      6
+    ]
+  ],
+  "2": [
+    [
+      1,
+      9
+    ],
+    [
+      10,
+      8
+    ],
+    [
+      2,
+      7
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      4,
+      5
+    ]
+  ],
+  "3": [
+    [
+      1,
+      8
+    ],
+    [
+      9,
+      7
+    ],
+    [
+      10,
+      6
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      3,
+      4
+    ]
+  ],
+  "4": [
+    [
+      1,
+      7
+    ],
+    [
+      8,
+      6
+    ],
+    [
+      9,
+      5
+    ],
+    [
+      10,
+      4
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "5": [
+    [
+      1,
+      6
+    ],
+    [
+      7,
+      5
+    ],
+    [
+      8,
+      4
+    ],
+    [
+      9,
+      3
+    ],
+    [
+      10,
+      2
+    ]
+  ],
+  "6": [
+    [
+      1,
+      5
+    ],
+    [
+      6,
+      4
+    ],
+    [
+      7,
+      3
+    ],
+    [
+      8,
+      2
+    ],
+    [
+      9,
+      10
+    ]
+  ],
+  "7": [
+    [
+      1,
+      4
+    ],
+    [
+      5,
+      3
+    ],
+    [
+      6,
+      2
+    ],
+    [
+      7,
+      10
+    ],
+    [
+      8,
+      9
+    ]
+  ],
+  "8": [
+    [
+      1,
+      3
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      5,
+      10
+    ],
+    [
+      6,
+      9
+    ],
+    [
+      7,
+      8
+    ]
+  ],
+  "9": [
+    [
+      1,
+      2
+    ],
+    [
+      3,
+      10
+    ],
+    [
+      4,
+      9
+    ],
+    [
+      5,
+      8
+    ],
+    [
+      6,
+      7
+    ]
+  ],
+  "10": [
+    [
+      1,
+      10
+    ],
+    [
+      2,
+      9
+    ],
+    [
+      3,
+      8
+    ],
+    [
+      4,
+      7
+    ],
+    [
+      5,
+      6
+    ]
+  ],
+  "11": [
+    [
+      1,
+      9
+    ],
+    [
+      10,
+      8
+    ],
+    [
+      2,
+      7
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      4,
+      5
+    ]
+  ],
+  "12": [
+    [
+      1,
+      8
+    ],
+    [
+      9,
+      7
+    ],
+    [
+      10,
+      6
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      3,
+      4
+    ]
+  ],
+  "13": [
+    [
+      1,
+      7
+    ],
+    [
+      8,
+      6
+    ],
+    [
+      9,
+      5
+    ],
+    [
+      10,
+      4
+    ],
+    [
+      2,
+      3
+    ]
+  ]
+}
+
+SCHEDULE_MATCHUP2 = {
+  "1": [
+    [
+      1,
+      2
+    ],
+    [
+      7,
+      6
+    ],
+    [
+      3,
+      10
+    ],
+    [
+      4,
+      8
+    ],
+    [
+      9,
+      5
+    ]
+  ],
+  "2": [
+    [
+      1,
+      6
+    ],
+    [
+      2,
+      10
+    ],
+    [
+      7,
+      8
+    ],
+    [
+      3,
+      5
+    ],
+    [
+      4,
+      9
+    ]
+  ],
+  "3": [
+    [
+      1,
+      10
+    ],
+    [
+      6,
+      8
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      7,
+      9
+    ],
+    [
+      3,
+      4
+    ]
+  ],
+  "4": [
+    [
+      1,
+      8
+    ],
+    [
+      10,
+      5
+    ],
+    [
+      6,
+      9
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      7,
+      3
+    ]
+  ],
+  "5": [
+    [
+      1,
+      5
+    ],
+    [
+      8,
+      9
+    ],
+    [
+      10,
+      4
+    ],
+    [
+      6,
+      3
+    ],
+    [
+      2,
+      7
+    ]
+  ],
+  "6": [
+    [
+      1,
+      9
+    ],
+    [
+      5,
+      4
+    ],
+    [
+      8,
+      3
+    ],
+    [
+      10,
+      7
+    ],
+    [
+      6,
+      2
+    ]
+  ],
+  "7": [
+    [
+      1,
+      4
+    ],
+    [
+      9,
+      3
+    ],
+    [
+      5,
+      7
+    ],
+    [
+      8,
+      2
+    ],
+    [
+      10,
+      6
+    ]
+  ],
+  "8": [
+    [
+      1,
+      3
+    ],
+    [
+      4,
+      7
+    ],
+    [
+      9,
+      2
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      8,
+      10
+    ]
+  ],
+  "9": [
+    [
+      1,
+      7
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      9,
+      10
+    ],
+    [
+      5,
+      8
+    ]
+  ],
+  "10": [
+    [
+      1,
+      2
+    ],
+    [
+      7,
+      6
+    ],
+    [
+      3,
+      10
+    ],
+    [
+      4,
+      8
+    ],
+    [
+      9,
+      5
+    ]
+  ],
+  "11": [
+    [
+      1,
+      6
+    ],
+    [
+      2,
+      10
+    ],
+    [
+      7,
+      8
+    ],
+    [
+      3,
+      5
+    ],
+    [
+      4,
+      9
+    ]
+  ],
+  "12": [
+    [
+      1,
+      10
+    ],
+    [
+      6,
+      8
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      7,
+      9
+    ],
+    [
+      3,
+      4
+    ]
+  ],
+  "13": [
+    [
+      1,
+      8
+    ],
+    [
+      10,
+      5
+    ],
+    [
+      6,
+      9
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      7,
+      3
+    ]
+  ]
 }
 
 def get_league():
@@ -68,30 +631,25 @@ def get_teams(league):
     return teams
 
 def get_weekly_data(league, week):
-    """Get scores and ESPN matchups for a specific week."""
+    """Get scores for a specific week (schedules are pre-defined, not from ESPN)."""
     scores = {}
-    espn_matchups = []
     
     try:
         box_scores = league.box_scores(week)
         for box in box_scores:
-            home_id = box.home_team.team_id
-            away_id = box.away_team.team_id
-            scores[str(home_id)] = box.home_score
-            scores[str(away_id)] = box.away_score
-            espn_matchups.append([home_id, away_id])
+            scores[str(box.home_team.team_id)] = box.home_score
+            scores[str(box.away_team.team_id)] = box.away_score
     except Exception as e:
         print(f"    Error fetching week {week}: {e}")
         return None
     
     return {
         "week": week,
-        "scores": scores,
-        "espnMatchups": espn_matchups
+        "scores": scores
     }
 
-def calculate_standings(teams, weeks, schedule):
-    """Calculate VP standings from regular season data."""
+def calculate_standings(teams, weeks, matchup1_schedule, matchup2_schedule):
+    """Calculate VP standings using both pre-defined schedules."""
     standings = {}
     for t in teams:
         standings[t['id']] = {
@@ -129,13 +687,11 @@ def calculate_standings(teams, weeks, schedule):
                 standings[home]['ties'] += 1
                 standings[away]['ties'] += 1
         
-        # ESPN matchups
-        for h, a in week['espnMatchups']:
+        # Process both matchup schedules
+        week_str = str(week['week'])
+        for h, a in matchup1_schedule.get(week_str, []):
             process_matchup(h, a)
-        
-        # Schedule matchups
-        week_schedule = schedule.get(str(week['week']), [])
-        for h, a in week_schedule:
+        for h, a in matchup2_schedule.get(week_str, []):
             process_matchup(h, a)
         
         # Points VP: top 3 = 2 VP, 4-6 = 1 VP
@@ -190,7 +746,7 @@ def main():
     # Calculate standings
     if regular_season_weeks:
         print("\n4. Calculating standings...")
-        standings = calculate_standings(teams, regular_season_weeks, SCHEDULE_H2H2)
+        standings = calculate_standings(teams, regular_season_weeks, SCHEDULE_MATCHUP1, SCHEDULE_MATCHUP2)
         print(f"   ✓ Current Standings:")
         for i, s in enumerate(standings[:10], 1):
             print(f"      {i}. {s['name']} - {s['totalVP']} VP ({s['totalPts']:.1f} pts)")
@@ -204,7 +760,8 @@ def main():
         "year": YEAR,
         "currentWeek": len(regular_season_weeks),
         "teams": teams,
-        "schedule": SCHEDULE_H2H2,
+        "scheduleMatchup1": SCHEDULE_MATCHUP1,
+        "scheduleMatchup2": SCHEDULE_MATCHUP2,
         "weeks": regular_season_weeks,
         "standings": standings if standings else []
     }
